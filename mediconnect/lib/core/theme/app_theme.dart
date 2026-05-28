@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppColors {
   static const Color primary = Color(0xFF0A84FF); // Clinical Blue
@@ -21,32 +22,33 @@ class AppTheme {
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: AppColors.surface,
+        onSurface: AppColors.textPrimary,
       ),
       scaffoldBackgroundColor: AppColors.background,
       textTheme: TextTheme(
         displayLarge: GoogleFonts.roboto(
-          fontSize: 48,
+          fontSize: 40.sp,
           fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,
         ),
         displayMedium: GoogleFonts.roboto(
-          fontSize: 32,
+          fontSize: 28.sp,
           fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,
         ),
+        headlineMedium: GoogleFonts.roboto(
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textPrimary,
+        ),
         bodyLarge: GoogleFonts.roboto(
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.normal,
           color: AppColors.textPrimary,
         ),
         bodyMedium: GoogleFonts.roboto(
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.normal,
-          color: AppColors.textPrimary,
-        ),
-        labelLarge: GoogleFonts.robotoMono(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,
         ),
       ),
@@ -62,6 +64,7 @@ class AppTheme {
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: Color(0xFF1C1C1E),
+        onSurface: Colors.white,
       ),
     );
   }

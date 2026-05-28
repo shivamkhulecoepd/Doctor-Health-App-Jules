@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconnect/core/theme/app_theme.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,51 +13,29 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverAppBar(
-            expandedHeight: 120,
-            floating: true,
-            backgroundColor: AppColors.background,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Good Morning,',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-                      Text('Sarah Adams',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () => context.push('/notifications'),
-                    icon: const Badge(
-                      label: Text('3'),
-                      child: Icon(Icons.notifications_outlined),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildAppBar(context),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeroCard(context),
-                  const SizedBox(height: 30),
+                  _buildUpcomingCard(context),
+                  SizedBox(height: 32.h),
+                  _buildSectionHeader('Quick Actions', () {}),
+                  SizedBox(height: 16.h),
                   _buildQuickActions(context),
-                  const SizedBox(height: 30),
-                  _buildVitalsSnapshot(context),
-                  const SizedBox(height: 30),
-                  _buildRecommendations(context),
-                  const SizedBox(height: 100),
+                  SizedBox(height: 32.h),
+                  _buildSectionHeader('Your Vitals', () {}),
+                  SizedBox(height: 16.h),
+                  _buildVitalsGrid(),
+                  SizedBox(height: 32.h),
+                  _buildSectionHeader('Top Specialists', () {}),
+                  SizedBox(height: 16.h),
+                  _buildSpecialistsList(),
+                  SizedBox(height: 100.h),
                 ],
               ),
             ),
@@ -65,40 +45,121 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroCard(BuildContext context) {
+  Widget _buildAppBar(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 140.h,
+      floating: true,
+      pinned: true,
+      elevation: 0,
+      backgroundColor: AppColors.background,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Padding(
+          padding: EdgeInsets.fromLTRB(24.w, 60.h, 24.w, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Welcome back,',
+                    style: TextStyle(color: AppColors.textSecondary, fontSize: 16.sp),
+                  ),
+                  Text(
+                    'Sarah Adams',
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ],
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: DesignSystem.borderM,
+                  boxShadow: DesignSystem.softShadow,
+                ),
+                child: IconButton(
+                  onPressed: () => context.push('/notifications'),
+                  icon: const Badge(
+                    label: Text('2'),
+                    child: Icon(Icons.notifications_outlined),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, VoidCallback onSeeAll) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        ),
+        TextButton(
+          onPressed: onSeeAll,
+          child: Text('See All', style: TextStyle(color: AppColors.primary, fontSize: 14.sp)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUpcomingCard(BuildContext context) {
     return FadeInRight(
-      child: GlassCard(
-        padding: const EdgeInsets.all(20),
+      child: Container(
+        padding: EdgeInsets.all(20.r),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [AppColors.primary, Color(0xFF0055FF)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: DesignSystem.borderL,
+          boxShadow: DesignSystem.premiumShadow,
+        ),
         child: Column(
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=dr1'),
+                Container(
+                  padding: EdgeInsets.all(12.r),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: DesignSystem.borderM,
+                  ),
+                  child: Icon(Icons.videocam_rounded, color: Colors.white, size: 24.sp),
                 ),
-                const SizedBox(width: 15),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Dr. Marcus Horizon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      Text('Cardiologist • 10:30 AM Today', style: TextStyle(color: AppColors.textSecondary.withOpacity(0.8))),
+                      Text(
+                        'Upcoming Consultation',
+                        style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12.sp),
+                      ),
+                      Text(
+                        'Dr. Marcus Horizon',
+                        style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
+                Text(
+                  '10:30 AM',
+                  style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
+            SizedBox(height: 20.h),
+            MediButton(
+              text: 'Join Consultation',
               onPressed: () => context.push('/video-call'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('Join Consultation'),
+              isPrimary: false,
             ),
           ],
         ),
@@ -108,150 +169,118 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildQuickActions(BuildContext context) {
     final actions = [
-      {'icon': Icons.calendar_month, 'label': 'Book', 'color': Colors.blue},
-      {'icon': Icons.medical_services, 'label': 'Records', 'color': Colors.green},
-      {'icon': Icons.medication, 'label': 'Prescriptions', 'color': Colors.orange},
-      {'icon': Icons.warning_amber, 'label': 'Emergency', 'color': Colors.red, 'route': '/sos'},
+      {'icon': Icons.calendar_month_rounded, 'label': 'Book', 'color': Colors.blue},
+      {'icon': Icons.medical_services_rounded, 'label': 'Records', 'color': Colors.green},
+      {'icon': Icons.medication_rounded, 'label': 'Meds', 'color': Colors.orange},
+      {'icon': Icons.emergency_rounded, 'label': 'SOS', 'color': Colors.red, 'route': '/sos'},
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      itemCount: actions.length,
-      itemBuilder: (context, index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: actions.map((action) {
         return GestureDetector(
           onTap: () {
-            if (actions[index]['route'] != null) {
-              context.push(actions[index]['route'] as String);
-            }
+            if (action['route'] != null) context.push(action['route'] as String);
           },
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                width: 64.w,
+                height: 64.w,
                 decoration: BoxDecoration(
-                  color: (actions[index]['color'] as Color).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  borderRadius: DesignSystem.borderM,
+                  boxShadow: DesignSystem.softShadow,
                 ),
-                child: Icon(actions[index]['icon'] as IconData, color: actions[index]['color'] as Color),
+                child: Icon(action['icon'] as IconData, color: action['color'] as Color, size: 28.sp),
               ),
-              const SizedBox(height: 8),
-              Text(actions[index]['label'] as String, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+              SizedBox(height: 8.h),
+              Text(action['label'] as String, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
             ],
           ),
         );
-      },
+      }).toList(),
     );
   }
 
-  Widget _buildVitalsSnapshot(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Health Vitals', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
-            TextButton(onPressed: () {}, child: const Text('See All')),
-          ],
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 120,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              _buildVitalCard('Heart Rate', '82 bpm', Icons.favorite, Colors.red),
-              _buildVitalCard('Sleep', '7h 20m', Icons.bedtime, Colors.indigo),
-              _buildVitalCard('Steps', '8,432', Icons.directions_walk, Colors.orange),
-            ],
-          ),
-        ),
-      ],
+  Widget _buildVitalsGrid() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: Row(
+        children: [
+          _buildVitalCard('Heart Rate', '82 bpm', Icons.favorite_rounded, Colors.red),
+          _buildVitalCard('Sleep', '7h 20m', Icons.bedtime_rounded, Colors.indigo),
+          _buildVitalCard('Steps', '8,432', Icons.directions_walk_rounded, Colors.orange),
+        ],
+      ),
     );
   }
 
   Widget _buildVitalCard(String title, String value, IconData icon, Color color) {
     return Container(
-      width: 130,
-      margin: const EdgeInsets.only(right: 15),
-      padding: const EdgeInsets.all(15),
+      width: 140.w,
+      margin: EdgeInsets.only(right: 16.w),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        borderRadius: DesignSystem.borderM,
+        boxShadow: DesignSystem.softShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(icon, color: color, size: 24),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              Text(title, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
-            ],
+          Container(
+            padding: EdgeInsets.all(8.r),
+            decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+            child: Icon(icon, color: color, size: 20.sp),
           ),
+          SizedBox(height: 16.h),
+          Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp)),
+          Text(title, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp)),
         ],
       ),
     );
   }
 
-  Widget _buildRecommendations(BuildContext context) {
+  Widget _buildSpecialistsList() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Recommended Doctors', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 15),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 2,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+      children: List.generate(2, (index) {
+        return Container(
+          margin: EdgeInsets.only(bottom: 16.h),
+          padding: EdgeInsets.all(12.r),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: DesignSystem.borderM,
+            boxShadow: DesignSystem.softShadow,
+          ),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: DesignSystem.borderM,
+                child: Image.network('https://i.pravatar.cc/150?u=doc$index', width: 80.w, height: 80.w, fit: BoxFit.cover),
               ),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network('https://i.pravatar.cc/100?u=doc$index', width: 80, height: 80, fit: BoxFit.cover),
-                  ),
-                  const SizedBox(width: 15),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Dr. Sarah Jenkins', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text('Dermatologist • ★ 4.8', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
-                        SizedBox(height: 5),
-                        Text('Available: Mon, 12 Oct', style: TextStyle(color: AppColors.secondary, fontSize: 12, fontWeight: FontWeight.w600)),
-                      ],
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Dr. Maria Elena', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                    Text('Psychologist • ★ 4.9', style: TextStyle(color: AppColors.textSecondary, fontSize: 13.sp)),
+                    SizedBox(height: 8.h),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      decoration: BoxDecoration(color: AppColors.secondary.withOpacity(0.1), borderRadius: BorderRadius.circular(4.r)),
+                      child: Text('Available Today', style: TextStyle(color: AppColors.secondary, fontSize: 10.sp, fontWeight: FontWeight.bold)),
                     ),
-                  ),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios, size: 16)),
-                ],
+                  ],
+                ),
               ),
-            );
-          },
-        ),
-      ],
+              IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios_rounded, size: 16)),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

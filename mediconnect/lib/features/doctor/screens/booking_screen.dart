@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/premium_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class BookingFlowScreen extends StatefulWidget {
   final String doctorId;
@@ -18,42 +22,55 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Book Appointment')),
+      appBar: AppBar(
+        title: Text('Book Appointment', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: AppColors.background,
+      ),
       body: Column(
         children: [
-          _buildStepProgress(),
-          Expanded(child: _buildStepContent()),
-          _buildBottomActions(),
+          _buildProgressBar(),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: _buildStepContent(),
+            ),
+          ),
+          _buildBottomBar(),
         ],
       ),
     );
   }
 
-  Widget _buildStepProgress() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+  Widget _buildProgressBar() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(3, (index) {
           final isActive = _currentStep >= index;
           return Expanded(
             child: Row(
               children: [
                 Container(
-                  width: 24,
-                  height: 24,
+                  width: 28.w,
+                  height: 28.w,
                   decoration: BoxDecoration(
                     color: isActive ? AppColors.primary : Colors.grey[300],
                     shape: BoxShape.circle,
+                    boxShadow: isActive ? DesignSystem.softShadow : null,
                   ),
                   child: Center(
-                    child: Text('${index + 1}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      '${index + 1}',
+                      style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 if (index < 2)
                   Expanded(
                     child: Container(
-                      height: 2,
+                      height: 2.h,
                       color: _currentStep > index ? AppColors.primary : Colors.grey[300],
                     ),
                   ),
@@ -67,49 +84,56 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
 
   Widget _buildStepContent() {
     switch (_currentStep) {
-      case 0:
-        return _buildDateTimeStep();
-      case 1:
-        return _buildConsultationTypeStep();
-      case 2:
-        return _buildPaymentStep();
-      default:
-        return Container();
+      case 0: return _buildDateTimeStep();
+      case 1: return _buildConsultationTypeStep();
+      case 2: return _buildPaymentStep();
+      default: return Container();
     }
   }
 
   Widget _buildDateTimeStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Select Date', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 15),
-          CalendarDatePicker(
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now(),
-            lastDate: DateTime.now().add(const Duration(days: 30)),
-            onDateChanged: (date) {},
+          Text('Select Date', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          SizedBox(height: 16.h),
+          MediCard(
+            padding: EdgeInsets.zero,
+            child: CalendarDatePicker(
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(const Duration(days: 30)),
+              onDateChanged: (date) {},
+            ),
           ),
-          const SizedBox(height: 30),
-          const Text('Select Time Slot', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 15),
+          SizedBox(height: 32.h),
+          Text('Available Time Slots', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          SizedBox(height: 16.h),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: 12.w,
+            runSpacing: 12.h,
             children: _slots.map((slot) {
               final isSelected = _selectedSlot == slot;
               return GestureDetector(
                 onTap: () => setState(() => _selectedSlot = slot),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                   decoration: BoxDecoration(
                     color: isSelected ? AppColors.primary : Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: isSelected ? AppColors.primary : Colors.grey[300]!),
+                    borderRadius: DesignSystem.borderM,
+                    border: Border.all(color: isSelected ? AppColors.primary : Colors.grey[200]!),
+                    boxShadow: isSelected ? DesignSystem.softShadow : null,
                   ),
-                  child: Text(slot, style: TextStyle(color: isSelected ? Colors.white : AppColors.textPrimary)),
+                  child: Text(
+                    slot,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : AppColors.textPrimary,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
                 ),
               );
             }).toList(),
@@ -121,46 +145,45 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
 
   Widget _buildConsultationTypeStep() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Consultation Type', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 20),
-          _buildTypeCard('In-Clinic', 'Visit the doctor at the clinic', Icons.home_work_outlined, true),
-          const SizedBox(height: 20),
-          _buildTypeCard('Telemedicine', 'Video call with the doctor', Icons.video_camera_front_outlined, false),
+          Text('Select Consultation Type', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          SizedBox(height: 24.h),
+          _buildTypeCard('In-Clinic Visit', 'Physical consultation at hospital', Icons.home_work_rounded, true),
+          SizedBox(height: 16.h),
+          _buildTypeCard('Online Consultation', 'Secure video call via app', Icons.videocam_rounded, false),
         ],
       ),
     );
   }
 
   Widget _buildTypeCard(String title, String subtitle, IconData icon, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary.withOpacity(0.05) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isSelected ? AppColors.primary : Colors.grey[200]!),
-      ),
+    return MediCard(
+      padding: EdgeInsets.all(20.r),
+      onTap: () {},
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: isSelected ? AppColors.primary : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
-            child: Icon(icon, color: isSelected ? Colors.white : AppColors.textSecondary),
+            padding: EdgeInsets.all(12.r),
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.primary : AppColors.background,
+              borderRadius: DesignSystem.borderM,
+            ),
+            child: Icon(icon, color: isSelected ? Colors.white : AppColors.textSecondary, size: 24.sp),
           ),
-          const SizedBox(width: 15),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                Text(subtitle, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                Text(subtitle, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp)),
               ],
             ),
           ),
-          if (isSelected) const Icon(Icons.check_circle, color: AppColors.primary),
+          if (isSelected) Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 24.sp),
         ],
       ),
     );
@@ -168,38 +191,35 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
 
   Widget _buildPaymentStep() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Order Summary', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: const Column(
+          Text('Order Summary', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          SizedBox(height: 16.h),
+          MediCard(
+            child: Column(
               children: [
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Consultation Fee'), Text('\$50.00')]),
-                SizedBox(height: 10),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Service Fee'), Text('\$2.00')]),
-                Divider(height: 30),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Total', style: TextStyle(fontWeight: FontWeight.bold)), Text('\$52.00', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary))]),
+                _buildSummaryRow('Consultation Fee', '\$50.00'),
+                SizedBox(height: 12.h),
+                _buildSummaryRow('Service Fee', '\$2.50'),
+                Divider(height: 32.h),
+                _buildSummaryRow('Total', '\$52.50', isTotal: true),
               ],
             ),
           ),
-          const SizedBox(height: 30),
-          const Text('Payment Method', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 15),
-          Container(
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-            child: const Row(
+          SizedBox(height: 32.h),
+          Text('Payment Method', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          SizedBox(height: 16.h),
+          MediCard(
+            onTap: () {},
+            child: Row(
               children: [
-                Icon(Icons.credit_card, color: AppColors.primary),
-                SizedBox(width: 15),
-                Text('**** **** **** 4242'),
-                Spacer(),
-                Icon(Icons.expand_more),
+                const Icon(Icons.credit_card_rounded, color: AppColors.primary),
+                SizedBox(width: 16.w),
+                const Text('**** **** **** 4242', style: TextStyle(fontWeight: FontWeight.w600)),
+                const Spacer(),
+                const Icon(Icons.keyboard_arrow_down_rounded),
               ],
             ),
           ),
@@ -208,26 +228,37 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
     );
   }
 
-  Widget _buildBottomActions() {
+  Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(color: isTotal ? AppColors.textPrimary : AppColors.textSecondary, fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
+        Text(value, style: TextStyle(color: isTotal ? AppColors.primary : AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: isTotal ? 18.sp : 14.sp)),
+      ],
+    );
+  }
+
+  Widget _buildBottomBar() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 40.h),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: DesignSystem.softShadow),
       child: Row(
         children: [
           if (_currentStep > 0)
             Expanded(
-              child: OutlinedButton(
-                onPressed: () => setState(() => _currentStep--),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(0, 56),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: EdgeInsets.only(right: 16.w),
+                child: MediButton(
+                  text: 'Back',
+                  isPrimary: false,
+                  onPressed: () => setState(() => _currentStep--),
                 ),
-                child: const Text('Back'),
               ),
             ),
-          if (_currentStep > 0) const SizedBox(width: 15),
           Expanded(
             flex: 2,
-            child: ElevatedButton(
+            child: MediButton(
+              text: _currentStep == 2 ? 'Confirm & Pay' : 'Next Step',
               onPressed: () {
                 if (_currentStep < 2) {
                   setState(() => _currentStep++);
@@ -235,13 +266,6 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
                   _showSuccessDialog();
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(0, 56),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
-              child: Text(_currentStep == 2 ? 'Confirm & Pay' : 'Next'),
             ),
           ),
         ],
@@ -253,28 +277,33 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.check_circle, color: AppColors.secondary, size: 80),
-            const SizedBox(height: 20),
-            const Text('Booking Successful!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            const SizedBox(height: 10),
-            const Text('Your appointment has been booked. You will receive a confirmation message.', textAlign: TextAlign.center, style: TextStyle(color: AppColors.textSecondary)),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () => context.go('/home'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: DesignSystem.borderL),
+        child: Padding(
+          padding: EdgeInsets.all(32.r),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.network(
+                'https://assets10.lottiefiles.com/packages/lf20_afwjh8re.json',
+                height: 120.h,
+                repeat: false,
               ),
-              child: const Text('Go to Home'),
-            ),
-          ],
+              SizedBox(height: 24.h),
+              Text('Appointment Booked!', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+              SizedBox(height: 12.h),
+              Text(
+                'Your consultation with Dr. Maria Elena is confirmed for Oct 12 at 09:00 AM.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.textSecondary, height: 1.5, fontSize: 14.sp),
+              ),
+              SizedBox(height: 32.h),
+              MediButton(
+                text: 'Back to Home',
+                onPressed: () => context.go('/home'),
+              ),
+            ],
+          ),
         ),
       ),
     );

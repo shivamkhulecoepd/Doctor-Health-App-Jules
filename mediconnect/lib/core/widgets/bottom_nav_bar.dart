@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -14,49 +16,43 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-      height: 72,
+      margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
+      height: 72.h,
       decoration: BoxDecoration(
         color: AppColors.textPrimary,
-        borderRadius: BorderRadius.circular(36),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(36.r),
+        boxShadow: DesignSystem.premiumShadow,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _NavBarItem(
-            icon: Icons.home_outlined,
-            activeIcon: Icons.home,
+            icon: Icons.grid_view_outlined,
+            activeIcon: Icons.grid_view_rounded,
             isSelected: currentIndex == 0,
             onTap: () => onTap(0),
           ),
           _NavBarItem(
             icon: Icons.person_search_outlined,
-            activeIcon: Icons.person_search,
+            activeIcon: Icons.person_search_rounded,
             isSelected: currentIndex == 1,
             onTap: () => onTap(1),
           ),
           _NavBarItem(
             icon: Icons.calendar_today_outlined,
-            activeIcon: Icons.calendar_today,
+            activeIcon: Icons.calendar_today_rounded,
             isSelected: currentIndex == 2,
             onTap: () => onTap(2),
           ),
           _NavBarItem(
             icon: Icons.favorite_outline,
-            activeIcon: Icons.favorite,
+            activeIcon: Icons.favorite_rounded,
             isSelected: currentIndex == 3,
             onTap: () => onTap(3),
           ),
           _NavBarItem(
             icon: Icons.person_outline,
-            activeIcon: Icons.person,
+            activeIcon: Icons.person_rounded,
             isSelected: currentIndex == 4,
             onTap: () => onTap(4),
           ),
@@ -89,8 +85,8 @@ class _NavBarItem extends StatelessWidget {
         scale: isSelected ? 1.2 : 1.0,
         child: Icon(
           isSelected ? activeIcon : icon,
-          color: isSelected ? AppColors.primary : Colors.white70,
-          size: 28,
+          color: isSelected ? Colors.white : Colors.white54,
+          size: 26.sp,
         ),
       ),
     );

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthDashboardScreen extends StatelessWidget {
   const HealthDashboardScreen({super.key});
@@ -9,49 +12,48 @@ class HealthDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Health Dashboard')),
+      appBar: AppBar(
+        title: Text('My Health', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: AppColors.background,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.all(24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildActivityHeatmap(),
-            const SizedBox(height: 30),
-            const Text('Vitals Grid', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            const SizedBox(height: 15),
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
-              childAspectRatio: 1.1,
-              children: [
-                _buildVitalCard('Heart Rate', '72 bpm', Icons.favorite, Colors.red, true),
-                _buildVitalCard('Blood Pressure', '120/80', Icons.speed, Colors.blue, false),
-                _buildVitalCard('Sleep', '7h 20m', Icons.bedtime, Colors.indigo, true),
-                _buildVitalCard('Steps', '8,432', Icons.directions_walk, Colors.orange, false),
-              ],
-            ),
-            const SizedBox(height: 30),
-            _buildAISuggestion(),
+            _buildActivitySection(),
+            SizedBox(height: 32.h),
+            Text('Daily Vitals', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+            SizedBox(height: 16.h),
+            _buildVitalsGrid(),
+            SizedBox(height: 32.h),
+            _buildInsightCard(),
+            SizedBox(height: 100.h),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildActivityHeatmap() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+  Widget _buildActivitySection() {
+    return MediCard(
+      padding: EdgeInsets.all(20.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Weekly Activity', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Weekly Activity', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+              Icon(Icons.more_horiz_rounded, color: AppColors.textSecondary),
+            ],
+          ),
+          SizedBox(height: 24.h),
           SizedBox(
-            height: 150,
+            height: 160.h,
             child: LineChart(
               LineChartData(
                 gridData: const FlGridData(show: false),
@@ -60,19 +62,21 @@ class HealthDashboardScreen extends StatelessWidget {
                 lineBarsData: [
                   LineChartBarData(
                     spots: const [
-                      FlSpot(0, 3),
-                      FlSpot(1, 1),
-                      FlSpot(2, 4),
-                      FlSpot(3, 2),
-                      FlSpot(4, 5),
-                      FlSpot(5, 3),
-                      FlSpot(6, 4),
+                      FlSpot(0, 3), FlSpot(1, 1), FlSpot(2, 4), FlSpot(3, 2), FlSpot(4, 5), FlSpot(5, 3), FlSpot(6, 4),
                     ],
                     isCurved: true,
                     color: AppColors.primary,
                     barWidth: 4,
+                    isStrokeCapRound: true,
                     dotData: const FlDotData(show: false),
-                    belowBarData: BarAreaData(show: true, color: AppColors.primary.withOpacity(0.1)),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary.withOpacity(0.2), AppColors.primary.withOpacity(0.0)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -83,10 +87,26 @@ class HealthDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildVitalCard(String title, String value, IconData icon, Color color, bool showGraph) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+  Widget _buildVitalsGrid() {
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      mainAxisSpacing: 16.w,
+      crossAxisSpacing: 16.w,
+      childAspectRatio: 1.1,
+      children: [
+        _buildVitalCard('Heart Rate', '72 bpm', Icons.favorite_rounded, Colors.red),
+        _buildVitalCard('Blood Pressure', '120/80', Icons.speed_rounded, Colors.blue),
+        _buildVitalCard('Sleep', '7h 20m', Icons.bedtime_rounded, Colors.indigo),
+        _buildVitalCard('Steps', '8,432', Icons.directions_walk_rounded, Colors.orange),
+      ],
+    );
+  }
+
+  Widget _buildVitalCard(String title, String value, IconData icon, Color color) {
+    return MediCard(
+      padding: EdgeInsets.all(16.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,15 +114,19 @@ class HealthDashboardScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: color),
-              if (showGraph) const Icon(Icons.show_chart, color: AppColors.textSecondary, size: 16),
+              Container(
+                padding: EdgeInsets.all(8.r),
+                decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+                child: Icon(icon, color: color, size: 20.sp),
+              ),
+              Icon(Icons.arrow_forward_ios_rounded, size: 12.sp, color: AppColors.textSecondary),
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text(title, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+              Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp)),
+              Text(title, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp)),
             ],
           ),
         ],
@@ -110,27 +134,32 @@ class HealthDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAISuggestion() {
-    return FadeInRight(
+  Widget _buildInsightCard() {
+    return FadeInUp(
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(24.r),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [AppColors.primary, Color(0xFF0055FF)]),
-          borderRadius: BorderRadius.circular(20),
+          color: AppColors.textPrimary,
+          borderRadius: DesignSystem.borderL,
+          boxShadow: DesignSystem.premiumShadow,
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.auto_awesome, color: Colors.white, size: 30),
-            SizedBox(width: 15),
+            Container(
+              padding: EdgeInsets.all(12.r),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: DesignSystem.borderM),
+              child: Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 28.sp),
+            ),
+            SizedBox(width: 20.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('AI Health Tip', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 5),
+                  Text('AI Health Insight', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                  SizedBox(height: 4.h),
                   Text(
-                    'You are consistent with your steps! Try increasing your water intake to reach your peak performance.',
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    'You reached your steps goal 5 times this week. Keep it up!',
+                    style: TextStyle(color: Colors.white70, fontSize: 13.sp, height: 1.4),
                   ),
                 ],
               ),
