@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/glass_card.dart';
+import 'package:animate_do/animate_do.dart';
 
 class SOSScreen extends StatefulWidget {
   const SOSScreen({super.key});
@@ -19,7 +21,7 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
     super.initState();
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1.5),
     )..repeat(reverse: true);
   }
 
@@ -32,11 +34,13 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
   void _startCountdown() async {
     setState(() => _isCounting = true);
     for (int i = 3; i > 0; i--) {
-      if (!mounted) return;
+      if (!mounted || !_isCounting) return;
       setState(() => _countdown = i);
       await Future.delayed(const Duration(seconds: 1));
     }
-    // Action triggered
+    if (_isCounting) {
+      // Trigger Emergency Action
+    }
   }
 
   @override
@@ -46,9 +50,9 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFFF3B30), Color(0xFF8B0000)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFF4B2B), Color(0xFFFF416C)],
           ),
         ),
         child: SafeArea(
@@ -57,32 +61,44 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: EdgeInsets.all(DesignSystem.spaceM),
-                  child: IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.close_rounded, color: Colors.white, size: 30.sp),
+                  padding: EdgeInsets.all(24.w),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white24,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close_rounded, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
               const Spacer(),
-              Text(
-                'EMERGENCY SOS',
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, letterSpacing: 2),
-              ),
-              SizedBox(height: 12.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
+              FadeInDown(
                 child: Text(
-                  'Press and hold the button for 3 seconds to call emergency services.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 16.sp),
+                  'EMERGENCY SOS',
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    color: Colors.white,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              FadeIn(
+                delay: const Duration(milliseconds: 200),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 48.w),
+                  child: Text(
+                    'Hold the button for 3 seconds to alert emergency services and shared contacts.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 16.sp, height: 1.5),
+                  ),
                 ),
               ),
               const Spacer(),
               _buildPulseButton(),
               const Spacer(),
-              _buildEmergencyContacts(),
-              SizedBox(height: 48.h),
+              FadeInUp(child: _buildEmergencyContacts()),
+              SizedBox(height: 60.h),
             ],
           ),
         ),
@@ -100,46 +116,46 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
       child: AnimatedBuilder(
         animation: _pulseController,
         builder: (context, child) {
-          return Container(
-            width: 240.w,
-            height: 240.w,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: 0.1),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.3),
-                width: 2 + (20 * _pulseController.value).w,
-              ),
-            ),
-            child: Center(
-              child: Container(
-                width: 160.w,
-                height: 160.w,
-                decoration: const BoxDecoration(
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 280.w * (1 + _pulseController.value * 0.15),
+                height: 280.w * (1 + _pulseController.value * 0.15),
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10)),
-                  ],
+                  color: Colors.white.withOpacity(0.1),
+                ),
+              ),
+              Container(
+                width: 240.w,
+                height: 240.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.2),
+                  border: Border.all(color: Colors.white30, width: 2),
                 ),
                 child: Center(
-                  child: _isCounting
-                      ? Text(
-                          '$_countdown',
-                          style: TextStyle(
-                            fontSize: 72.sp,
-                            fontWeight: FontWeight.w900,
-                            color: const Color(0xFFFF3B30),
-                          ),
-                        )
-                      : Icon(
-                          Icons.power_settings_new_rounded,
-                          size: 80.sp,
-                          color: const Color(0xFFFF3B30),
-                        ),
+                  child: Container(
+                    width: 180.w,
+                    height: 180.w,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 30, offset: Offset(0, 10))],
+                    ),
+                    child: Center(
+                      child: _isCounting
+                          ? Text(
+                              '$_countdown',
+                              style: TextStyle(fontSize: 80.sp, fontWeight: FontWeight.w900, color: const Color(0xFFFF416C)),
+                            )
+                          : Icon(Icons.emergency_share_rounded, size: 72.sp, color: const Color(0xFFFF416C)),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           );
         },
       ),
@@ -150,20 +166,21 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
     return Column(
       children: [
         Text(
-          'Quick Contacts',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.sp),
+          'EMERGENCY CONTACTS',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13.sp, letterSpacing: 1.5),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 24.h),
         SizedBox(
-          height: 90.h,
+          height: 100.h,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            physics: const BouncingScrollPhysics(),
             children: [
-              _buildContactItem('Wife', Icons.person_rounded),
+              _buildContactItem('Wife', Icons.favorite_rounded),
               _buildContactItem('Dad', Icons.person_rounded),
               _buildContactItem('Clinic', Icons.local_hospital_rounded),
-              _buildContactItem('911', Icons.emergency_rounded),
+              _buildContactItem('Ambulance', Icons.emergency_rounded),
             ],
           ),
         ),
@@ -173,16 +190,16 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
 
   Widget _buildContactItem(String name, IconData icon) {
     return Padding(
-      padding: EdgeInsets.only(right: 20.w),
+      padding: EdgeInsets.only(right: 24.w),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 30.r,
-            backgroundColor: Colors.white24,
-            child: Icon(icon, color: Colors.white, size: 24.sp),
+          Container(
+            padding: EdgeInsets.all(16.r),
+            decoration: const BoxDecoration(color: Colors.white24, shape: BoxShape.circle),
+            child: Icon(icon, color: Colors.white, size: 28.sp),
           ),
           SizedBox(height: 8.h),
-          Text(name, style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w500)),
+          Text(name, style: TextStyle(color: Colors.white, fontSize: 13.sp, fontWeight: FontWeight.w600)),
         ],
       ),
     );

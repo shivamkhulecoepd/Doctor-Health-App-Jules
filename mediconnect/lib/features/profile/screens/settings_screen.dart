@@ -1,88 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/services/mock_data_service.dart';
+import 'package:mediconnect/core/theme/app_colors.dart';
+import 'package:mediconnect/core/theme/app_spacing.dart';
+import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:animate_do/animate_do.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings', style: TextStyle(color: colorScheme.onSurface)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text('Settings'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          _buildSettingsGroup(context, 'Appearance', [
-            _buildSettingsItem(context, 'Theme', 'System Default', Icons.dark_mode_outlined),
-            _buildSettingsItem(context, 'Font Size', 'Medium', Icons.text_fields),
-          ]),
-          const SizedBox(height: 25),
-          _buildSettingsGroup(context, 'Preferences', [
-            _buildSettingsItem(context, 'Language', 'English (US)', Icons.language),
-            _buildSettingsItem(context, 'Currency', 'USD (\$)', Icons.monetization_on_outlined),
-          ]),
-          const SizedBox(height: 25),
-          _buildSettingsGroup(context, 'Notifications', [
-            _buildToggleItem(context, 'Push Notifications', true),
-            _buildToggleItem(context, 'Email Updates', false),
-          ]),
-          const SizedBox(height: 40),
-          Center(
-            child: TextButton(
-              onPressed: () {},
-              child: Text('Sign Out', style: TextStyle(color: colorScheme.error, fontWeight: FontWeight.bold)),
-            ),
-          ),
-          Center(child: Text('Version 1.0.0', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12))),
-        ],
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(AppSpacing.s24),
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSection(context, 'App Preferences', [
+              _buildSettingTile(
+                icon: Icons.dark_mode_outlined,
+                title: 'Dark Mode',
+                trailing: Switch.adaptive(
+                  value: isDark,
+                  onChanged: (v) {},
+                  activeColor: AppColors.primary,
+                ),
+              ),
+              _buildSettingTile(
+                icon: Icons.notifications_active_outlined,
+                title: 'Notifications',
+                trailing: Switch.adaptive(
+                  value: true,
+                  onChanged: (v) {},
+                  activeColor: AppColors.primary,
+                ),
+              ),
+              _buildSettingTile(
+                icon: Icons.language_rounded,
+                title: 'Language',
+                trailing: Text('English', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600, fontSize: 14.sp)),
+              ),
+            ]),
+            SizedBox(height: AppSpacing.s32),
+            _buildSection(context, 'Account', [
+              _buildSettingTile(icon: Icons.person_outline_rounded, title: 'Personal Info'),
+              _buildSettingTile(icon: Icons.security_rounded, title: 'Security'),
+              _buildSettingTile(icon: Icons.help_center_outlined, title: 'Help Center'),
+              _buildSettingTile(icon: Icons.info_outline_rounded, title: 'About MediConnect', isLast: true),
+            ]),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSettingsGroup(BuildContext context, String title, List<Widget> items) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, bottom: 10),
-          child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary)),
+          padding: EdgeInsets.only(left: 8.w, bottom: 12.h),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: AppColors.textSecondaryLight),
+          ),
         ),
         Container(
-          decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(20)),
-          child: Column(children: items),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.cardDark : Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Column(children: children),
         ),
       ],
     );
   }
 
-  Widget _buildSettingsItem(BuildContext context, String title, String value, IconData icon) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildSettingTile({required IconData icon, required String title, Widget? trailing, bool isLast = false}) {
     return ListTile(
-      leading: Icon(icon, color: colorScheme.onSurface),
-      title: Text(title, style: TextStyle(color: colorScheme.onSurface)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(value, style: TextStyle(color: colorScheme.onSurfaceVariant)),
-          Icon(Icons.arrow_forward_ios, size: 14, color: colorScheme.onSurfaceVariant),
-        ],
-      ),
-      onTap: () {},
-    );
-  }
-
-  Widget _buildToggleItem(BuildContext context, String title, bool value) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return SwitchListTile(
-      title: Text(title, style: TextStyle(color: colorScheme.onSurface)),
-      value: value,
-      onChanged: (v) {},
-      activeColor: colorScheme.primary,
+      leading: Icon(icon, color: AppColors.primary, size: 22.sp),
+      title: Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500)),
+      trailing: trailing ?? Icon(Icons.arrow_forward_ios_rounded, size: 14.sp, color: AppColors.textSecondaryLight.withOpacity(0.5)),
+      shape: !isLast ? Border(bottom: BorderSide(color: AppColors.textSecondaryLight.withOpacity(0.1))) : null,
     );
   }
 }

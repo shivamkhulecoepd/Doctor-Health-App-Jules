@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
+import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:animate_do/animate_do.dart';
 
 class MedicalRecordsScreen extends StatelessWidget {
   const MedicalRecordsScreen({super.key});
@@ -23,20 +25,24 @@ class MedicalRecordsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildCategoryGrid(context),
+            FadeInDown(child: _buildCategoryGrid(context)),
             SizedBox(height: 32.h),
-            Text('Recent Uploads', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
+            FadeInUp(
+              child: Text('Recent Uploads', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
+            ),
             SizedBox(height: 16.h),
             _buildRecentList(context),
             SizedBox(height: 100.h),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: colorScheme.primary,
-        child: Icon(Icons.add_rounded, color: colorScheme.onPrimary, size: 28.sp),
-        elevation: 4,
+      floatingActionButton: FadeInRight(
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: colorScheme.primary,
+          child: Icon(Icons.cloud_upload_rounded, color: Colors.white, size: 28.sp),
+          elevation: 6,
+        ),
       ),
     );
   }
@@ -57,30 +63,26 @@ class MedicalRecordsScreen extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 16.w,
         crossAxisSpacing: 16.w,
-        childAspectRatio: 1.4,
+        childAspectRatio: 1.3,
       ),
       itemCount: categories.length,
       itemBuilder: (context, index) {
         final category = categories[index];
-        return MediCard(
+        final color = category['color'] as Color;
+        return GlassCard(
           padding: EdgeInsets.zero,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [(category['color'] as Color).withOpacity(0.1), (category['color'] as Color).withOpacity(0.05)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          onTap: () {},
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(12.r),
+                decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+                child: Icon(category['icon'] as IconData, color: color, size: 30.sp),
               ),
-              borderRadius: DesignSystem.borderL,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(category['icon'] as IconData, color: category['color'] as Color, size: 32.sp),
-                SizedBox(height: 8.h),
-                Text(category['name'] as String, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp, color: colorScheme.onSurface)),
-              ],
-            ),
+              SizedBox(height: 12.h),
+              Text(category['name'] as String, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp, color: colorScheme.onSurface)),
+            ],
           ),
         );
       },
@@ -90,47 +92,50 @@ class MedicalRecordsScreen extends StatelessWidget {
   Widget _buildRecentList(BuildContext context) {
     return Column(
       children: [
-        _buildRecordTile(context, 'Blood Test Result', 'Oct 10, 2023', 'PDF', Colors.red),
-        _buildRecordTile(context, 'Chest X-Ray', 'Oct 05, 2023', 'IMG', Colors.blue),
-        _buildRecordTile(context, 'Vaccination Card', 'Sep 20, 2023', 'PDF', Colors.green),
+        _buildRecordTile(context, 'Blood Test Result', 'Oct 10, 2023', 'PDF', Colors.red, 0),
+        _buildRecordTile(context, 'Chest X-Ray Scans', 'Oct 05, 2023', 'IMG', Colors.blue, 1),
+        _buildRecordTile(context, 'Vaccination Card', 'Sep 20, 2023', 'PDF', Colors.green, 2),
       ],
     );
   }
 
-  Widget _buildRecordTile(BuildContext context, String title, String date, String type, Color color) {
+  Widget _buildRecordTile(BuildContext context, String title, String date, String type, Color color, int index) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
-      padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: DesignSystem.borderM,
-        boxShadow: DesignSystem.softShadow,
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(12.r),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: DesignSystem.borderM),
-            child: Icon(Icons.insert_drive_file_rounded, color: color, size: 24.sp),
+    return FadeInUp(
+      delay: Duration(milliseconds: 300 + (index * 100)),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16.h),
+        child: GlassCard(
+          padding: EdgeInsets.all(16.r),
+          onTap: () {},
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(12.r),
+                decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: DesignSystem.borderM),
+                child: Icon(Icons.insert_drive_file_rounded, color: color, size: 24.sp),
+              ),
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp, color: colorScheme.onSurface)),
+                    SizedBox(height: 4.h),
+                    Text(date, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                decoration: BoxDecoration(color: colorScheme.surfaceVariant.withOpacity(0.5), borderRadius: BorderRadius.circular(6.r)),
+                child: Text(type, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
+              ),
+              SizedBox(width: 8.w),
+              Icon(Icons.more_vert_rounded, size: 20.sp, color: colorScheme.onSurfaceVariant),
+            ],
           ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp, color: colorScheme.onSurface)),
-                SizedBox(height: 4.h),
-                Text(date, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-            decoration: BoxDecoration(color: colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(4.r)),
-            child: Text(type, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurfaceVariant)),
-          ),
-        ],
+        ),
       ),
     );
   }
