@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,29 +20,32 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Book Appointment', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        title: Text('Book Appointment', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
       ),
       body: Column(
         children: [
-          _buildProgressBar(),
+          _buildProgressBar(context),
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              child: _buildStepContent(),
+              child: _buildStepContent(context),
             ),
           ),
-          _buildBottomBar(),
+          _buildBottomBar(context),
         ],
       ),
     );
   }
 
-  Widget _buildProgressBar() {
+  Widget _buildProgressBar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
       child: Row(
@@ -56,14 +58,14 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
                   width: 28.w,
                   height: 28.w,
                   decoration: BoxDecoration(
-                    color: isActive ? AppColors.primary : Colors.grey[300],
+                    color: isActive ? colorScheme.primary : colorScheme.surfaceVariant,
                     shape: BoxShape.circle,
                     boxShadow: isActive ? DesignSystem.softShadow : null,
                   ),
                   child: Center(
                     child: Text(
                       '${index + 1}',
-                      style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: isActive ? colorScheme.onPrimary : colorScheme.onSurfaceVariant, fontSize: 12.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -71,7 +73,7 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
                   Expanded(
                     child: Container(
                       height: 2.h,
-                      color: _currentStep > index ? AppColors.primary : Colors.grey[300],
+                      color: _currentStep > index ? colorScheme.primary : colorScheme.surfaceVariant,
                     ),
                   ),
               ],
@@ -82,34 +84,42 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
     );
   }
 
-  Widget _buildStepContent() {
+  Widget _buildStepContent(BuildContext context) {
     switch (_currentStep) {
-      case 0: return _buildDateTimeStep();
-      case 1: return _buildConsultationTypeStep();
-      case 2: return _buildPaymentStep();
+      case 0: return _buildDateTimeStep(context);
+      case 1: return _buildConsultationTypeStep(context);
+      case 2: return _buildPaymentStep(context);
       default: return Container();
     }
   }
 
-  Widget _buildDateTimeStep() {
+  Widget _buildDateTimeStep(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       padding: EdgeInsets.all(24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Select Date', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text('Select Date', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
           SizedBox(height: 16.h),
           MediCard(
             padding: EdgeInsets.zero,
-            child: CalendarDatePicker(
-              initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(const Duration(days: 30)),
-              onDateChanged: (date) {},
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                colorScheme: colorScheme.copyWith(
+                  onSurface: colorScheme.onSurface,
+                ),
+              ),
+              child: CalendarDatePicker(
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 30)),
+                onDateChanged: (date) {},
+              ),
             ),
           ),
           SizedBox(height: 32.h),
-          Text('Available Time Slots', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text('Available Time Slots', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
           SizedBox(height: 16.h),
           Wrap(
             spacing: 12.w,
@@ -122,15 +132,15 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
                   duration: const Duration(milliseconds: 200),
                   padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.white,
+                    color: isSelected ? colorScheme.primary : colorScheme.surface,
                     borderRadius: DesignSystem.borderM,
-                    border: Border.all(color: isSelected ? AppColors.primary : Colors.grey[200]!),
+                    border: Border.all(color: isSelected ? colorScheme.primary : colorScheme.outlineVariant),
                     boxShadow: isSelected ? DesignSystem.softShadow : null,
                   ),
                   child: Text(
                     slot,
                     style: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.textPrimary,
+                      color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                   ),
@@ -143,23 +153,25 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
     );
   }
 
-  Widget _buildConsultationTypeStep() {
+  Widget _buildConsultationTypeStep(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.all(24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Select Consultation Type', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text('Select Consultation Type', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
           SizedBox(height: 24.h),
-          _buildTypeCard('In-Clinic Visit', 'Physical consultation at hospital', Icons.home_work_rounded, true),
+          _buildTypeCard(context, 'In-Clinic Visit', 'Physical consultation at hospital', Icons.home_work_rounded, true),
           SizedBox(height: 16.h),
-          _buildTypeCard('Online Consultation', 'Secure video call via app', Icons.videocam_rounded, false),
+          _buildTypeCard(context, 'Online Consultation', 'Secure video call via app', Icons.videocam_rounded, false),
         ],
       ),
     );
   }
 
-  Widget _buildTypeCard(String title, String subtitle, IconData icon, bool isSelected) {
+  Widget _buildTypeCard(BuildContext context, String title, String subtitle, IconData icon, bool isSelected) {
+    final colorScheme = Theme.of(context).colorScheme;
     return MediCard(
       padding: EdgeInsets.all(20.r),
       onTap: () {},
@@ -168,58 +180,59 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
           Container(
             padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : AppColors.background,
+              color: isSelected ? colorScheme.primary : colorScheme.surfaceVariant,
               borderRadius: DesignSystem.borderM,
             ),
-            child: Icon(icon, color: isSelected ? Colors.white : AppColors.textSecondary, size: 24.sp),
+            child: Icon(icon, color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant, size: 24.sp),
           ),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
-                Text(subtitle, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp)),
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, color: colorScheme.onSurface)),
+                Text(subtitle, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
               ],
             ),
           ),
-          if (isSelected) Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 24.sp),
+          if (isSelected) Icon(Icons.check_circle_rounded, color: colorScheme.primary, size: 24.sp),
         ],
       ),
     );
   }
 
-  Widget _buildPaymentStep() {
+  Widget _buildPaymentStep(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.all(24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Order Summary', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text('Order Summary', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
           SizedBox(height: 16.h),
           MediCard(
             child: Column(
               children: [
-                _buildSummaryRow('Consultation Fee', '\$50.00'),
+                _buildSummaryRow(context, 'Consultation Fee', '\$50.00'),
                 SizedBox(height: 12.h),
-                _buildSummaryRow('Service Fee', '\$2.50'),
-                Divider(height: 32.h),
-                _buildSummaryRow('Total', '\$52.50', isTotal: true),
+                _buildSummaryRow(context, 'Service Fee', '\$2.50'),
+                Divider(height: 32.h, color: colorScheme.outlineVariant),
+                _buildSummaryRow(context, 'Total', '\$52.50', isTotal: true),
               ],
             ),
           ),
           SizedBox(height: 32.h),
-          Text('Payment Method', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text('Payment Method', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
           SizedBox(height: 16.h),
           MediCard(
             onTap: () {},
             child: Row(
               children: [
-                const Icon(Icons.credit_card_rounded, color: AppColors.primary),
+                Icon(Icons.credit_card_rounded, color: colorScheme.primary),
                 SizedBox(width: 16.w),
-                const Text('**** **** **** 4242', style: TextStyle(fontWeight: FontWeight.w600)),
+                Text('**** **** **** 4242', style: TextStyle(fontWeight: FontWeight.w600, color: colorScheme.onSurface)),
                 const Spacer(),
-                const Icon(Icons.keyboard_arrow_down_rounded),
+                Icon(Icons.keyboard_arrow_down_rounded, color: colorScheme.onSurfaceVariant),
               ],
             ),
           ),
@@ -228,20 +241,22 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
+  Widget _buildSummaryRow(BuildContext context, String label, String value, {bool isTotal = false}) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyle(color: isTotal ? AppColors.textPrimary : AppColors.textSecondary, fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
-        Text(value, style: TextStyle(color: isTotal ? AppColors.primary : AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: isTotal ? 18.sp : 14.sp)),
+        Text(label, style: TextStyle(color: isTotal ? colorScheme.onSurface : colorScheme.onSurfaceVariant, fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
+        Text(value, style: TextStyle(color: isTotal ? colorScheme.primary : colorScheme.onSurface, fontWeight: FontWeight.bold, fontSize: isTotal ? 18.sp : 14.sp)),
       ],
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 40.h),
-      decoration: BoxDecoration(color: Colors.white, boxShadow: DesignSystem.softShadow),
+      decoration: BoxDecoration(color: colorScheme.surface, boxShadow: DesignSystem.softShadow),
       child: Row(
         children: [
           if (_currentStep > 0)

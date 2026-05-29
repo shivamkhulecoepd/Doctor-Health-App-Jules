@@ -7,11 +7,9 @@ Analyzing mediconnect...
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/widgets/glass_card.dart:29:44 • deprecated_member_use
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/widgets/glass_card.dart:42:35 • deprecated_member_use
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/widgets/glass_card.dart:46:41 • deprecated_member_use
-warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/ai_assistant/screens/ai_chat_screen.dart:2:8 • unused_import
-   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:70:67 • deprecated_member_use
-   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/ai_assistant/screens/ai_chat_screen.dart:104:40 • deprecated_member_use
-   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:104:55 • deprecated_member_use
-   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:113:78 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:66:67 • deprecated_member_use
+  error • The getter 'textPrimary' isn't defined for the type 'AppColors' • lib/features/ai_assistant/screens/ai_chat_screen.dart:70:91 • undefined_getter
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:106:76 • deprecated_member_use
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/appointments/screens/appointment_details_screen.dart:55:36 • deprecated_member_use
   error • Invalid constant value • lib/features/appointments/screens/appointment_details_screen.dart:70:99 • invalid_constant
   error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/appointments/screens/appointment_details_screen.dart:70:109 • undefined_getter
@@ -78,8 +76,9 @@ warning • The value of the local variable 'colorScheme' isn't used • lib/fea
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:154:62 • deprecated_member_use
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:258:52 • deprecated_member_use
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:316:78 • deprecated_member_use
-warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/home/screens/notifications_screen.dart:2:8 • unused_import
-   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/notifications_screen.dart:50:85 • deprecated_member_use
+  error • The getter 'background' isn't defined for the type 'AppColors' • lib/features/home/screens/notifications_screen.dart:16:36 • undefined_getter
+  error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/home/screens/notifications_screen.dart:69:78 • undefined_getter
+  error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/home/screens/notifications_screen.dart:77:61 • undefined_getter
 warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/onboarding/screens/onboarding_screen.dart:3:8 • unused_import
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/screens/onboarding_screen.dart:74:58 • deprecated_member_use
    info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/screens/splash_screen.dart:42:43 • deprecated_member_use
@@ -103,4 +102,4 @@ warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • l
   error • Invalid constant value • lib/features/profile/screens/support_screen.dart:62:114 • invalid_constant
   error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/profile/screens/support_screen.dart:62:124 • undefined_getter
 
-102 issues found. (ran in 2.4s)
+101 issues found. (ran in 2.4s)

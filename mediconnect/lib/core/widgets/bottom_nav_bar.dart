@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -15,11 +14,14 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
       height: 72.h,
       decoration: BoxDecoration(
-        color: AppColors.textPrimary,
+        color: isDark ? colorScheme.surface : colorScheme.onSurface,
         borderRadius: BorderRadius.circular(36.r),
         boxShadow: DesignSystem.premiumShadow,
       ),
@@ -77,6 +79,10 @@ class _NavBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final activeColor = isDark ? Theme.of(context).colorScheme.primary : Colors.white;
+    final inactiveColor = isDark ? Colors.white54 : Colors.white54;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -85,7 +91,7 @@ class _NavBarItem extends StatelessWidget {
         scale: isSelected ? 1.2 : 1.0,
         child: Icon(
           isSelected ? activeIcon : icon,
-          color: isSelected ? Colors.white : Colors.white54,
+          color: isSelected ? activeColor : inactiveColor,
           size: 26.sp,
         ),
       ),

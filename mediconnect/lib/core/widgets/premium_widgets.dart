@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 
 class MediButton extends StatelessWidget {
@@ -21,15 +20,17 @@ class MediButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isPrimary ? AppColors.primary : Colors.white,
-        foregroundColor: isPrimary ? Colors.white : AppColors.primary,
+        backgroundColor: isPrimary ? colorScheme.primary : colorScheme.surface,
+        foregroundColor: isPrimary ? colorScheme.onPrimary : colorScheme.primary,
         elevation: 0,
         minimumSize: Size(double.infinity, 56.h),
         shape: RoundedRectangleBorder(borderRadius: DesignSystem.borderM),
-        side: isPrimary ? BorderSide.none : const BorderSide(color: AppColors.primary),
+        side: isPrimary ? BorderSide.none : BorderSide(color: colorScheme.primary),
       ),
       child: isLoading
           ? SizedBox(
@@ -37,7 +38,7 @@ class MediButton extends StatelessWidget {
               width: 20.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: isPrimary ? Colors.white : AppColors.primary,
+                color: isPrimary ? colorScheme.onPrimary : colorScheme.primary,
               ),
             )
           : Row(
@@ -76,25 +77,28 @@ class MediTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: DesignSystem.borderM,
         boxShadow: DesignSystem.softShadow,
       ),
       child: TextField(
         controller: controller,
         obscureText: isPassword,
+        style: TextStyle(color: colorScheme.onSurface),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp),
-          prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: AppColors.primary, size: 20.sp) : null,
+          hintStyle: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14.sp),
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: colorScheme.primary, size: 20.sp) : null,
           border: OutlineInputBorder(
             borderRadius: DesignSystem.borderM,
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: colorScheme.surface,
           contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         ),
       ),
@@ -106,22 +110,26 @@ class MediCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final VoidCallback? onTap;
+  final Color? color;
 
   const MediCard({
     super.key,
     required this.child,
     this.padding,
     this.onTap,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: padding ?? EdgeInsets.all(DesignSystem.spaceM),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: color ?? colorScheme.surface,
           borderRadius: DesignSystem.borderL,
           boxShadow: DesignSystem.softShadow,
         ),

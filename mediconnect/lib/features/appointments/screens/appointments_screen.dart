@@ -20,14 +20,17 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Appointments'),
+        title: Text('My Appointments', style: TextStyle(color: colorScheme.onSurface)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          labelColor: AppColors.primary,
-          unselectedLabelColor: AppColors.textSecondary,
-          indicatorColor: AppColors.primary,
+          labelColor: colorScheme.primary,
+          unselectedLabelColor: colorScheme.onSurfaceVariant,
+          indicatorColor: colorScheme.primary,
           tabs: const [
             Tab(text: 'Upcoming'),
             Tab(text: 'Past'),
@@ -78,24 +81,26 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
   }
 
   Widget _buildCancelledList() {
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.event_busy, size: 80, color: Colors.grey[300]),
+          Icon(Icons.event_busy, size: 80, color: colorScheme.outlineVariant),
           const SizedBox(height: 20),
-          const Text('No cancelled appointments', style: TextStyle(color: AppColors.textSecondary)),
+          Text('No cancelled appointments', style: TextStyle(color: colorScheme.onSurfaceVariant)),
         ],
       ),
     );
   }
 
   Widget _buildAppointmentCard({required String status, required Color statusColor, required String date}) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 5))],
       ),
@@ -112,8 +117,8 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Dr. Marcus Horizon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    const Text('Cardiologist', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                    Text('Dr. Marcus Horizon', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: colorScheme.onSurface)),
+                    Text('Cardiologist', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13)),
                   ],
                 ),
               ),
@@ -124,14 +129,14 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
               ),
             ],
           ),
-          const Divider(height: 30),
+          Divider(height: 30, color: colorScheme.outlineVariant),
           Row(
             children: [
-              const Icon(Icons.calendar_today, size: 16, color: AppColors.textSecondary),
+              Icon(Icons.calendar_today, size: 16, color: colorScheme.onSurfaceVariant),
               const SizedBox(width: 8),
-              Text(date, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+              Text(date, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13)),
               const Spacer(),
-              const Icon(Icons.videocam, size: 18, color: AppColors.primary),
+              Icon(Icons.videocam, size: 18, color: colorScheme.primary),
             ],
           ),
           const SizedBox(height: 15),
@@ -140,7 +145,11 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {},
-                  style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colorScheme.onSurface,
+                    side: BorderSide(color: colorScheme.outlineVariant),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
                   child: const Text('Cancel'),
                 ),
               ),
@@ -149,8 +158,8 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                   child: const Text('Reschedule'),

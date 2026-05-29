@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mediconnect/features/profile/providers/user_provider.dart';
 
-class UserProfileScreen extends StatefulWidget {
+class UserProfileScreen extends ConsumerStatefulWidget {
   const UserProfileScreen({super.key});
 
   @override
-  State<UserProfileScreen> createState() => _UserProfileScreenState();
+  ConsumerState<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
   bool _isCardFlipped = false;
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+        title: Text('My Profile', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
         centerTitle: true,
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -29,9 +33,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
-            _buildProfileHeader(),
+            _buildProfileHeader(user),
             SizedBox(height: 32.h),
-            _buildHealthIDCard(),
+            _buildHealthIDCard(user),
             SizedBox(height: 32.h),
             _buildMenuSection('General', [
               _buildMenuItem(Icons.person_outline_rounded, 'Personal Information', () {}),
@@ -56,36 +60,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(UserProfile user) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Stack(
           children: [
             Container(
               padding: EdgeInsets.all(4.r),
-              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primary, width: 2)),
-              child: CircleAvatar(radius: 50.r, backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=user')),
+              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: colorScheme.primary, width: 2)),
+              child: CircleAvatar(radius: 50.r, backgroundImage: NetworkImage(user.imageUrl)),
             ),
             Positioned(
               bottom: 0,
               right: 0,
               child: Container(
                 padding: EdgeInsets.all(8.r),
-                decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
-                child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 16.sp),
+                decoration: BoxDecoration(color: colorScheme.primary, shape: BoxShape.circle),
+                child: Icon(Icons.camera_alt_rounded, color: colorScheme.onPrimary, size: 16.sp),
               ),
             ),
           ],
         ),
         SizedBox(height: 16.h),
-        Text('Sarah Adams', style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold)),
+        Text(user.name, style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
         SizedBox(height: 4.h),
-        Text('ID: MC-2023-8942', style: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp)),
+        Text('ID: ${user.id}', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14.sp)),
       ],
     );
   }
 
-  Widget _buildHealthIDCard() {
+  Widget _buildHealthIDCard(UserProfile user) {
     return GestureDetector(
       onTap: () => setState(() => _isCardFlipped = !_isCardFlipped),
       child: AnimatedSwitcher(
@@ -113,14 +118,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _buildCardFront() {
+  Widget _buildCardFront(UserProfile user) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       key: const ValueKey(false),
       width: double.infinity,
       height: 200.h,
       padding: EdgeInsets.all(24.r),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [AppColors.primary, Color(0xFF0055FF)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        gradient: LinearGradient(
+          colors: [colorScheme.primary, colorScheme.primary.withBlue(255).withRed(0)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: DesignSystem.borderL,
         boxShadow: DesignSystem.premiumShadow,
       ),
@@ -138,15 +148,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('SARAH ADAMS', style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, letterSpacing: 1)),
-              Text('DOB: 12/05/1995', style: TextStyle(color: Colors.white70, fontSize: 12.sp)),
+              Text(user.name.toUpperCase(), style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, letterSpacing: 1)),
+              Text('DOB: ${user.dob}', style: TextStyle(color: Colors.white70, fontSize: 12.sp)),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('BLOOD TYPE: A+', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14.sp)),
-              Container(padding: EdgeInsets.all(6.r), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.r)), child: Icon(Icons.qr_code_2_rounded, size: 28.sp, color: AppColors.textPrimary)),
+              Text('BLOOD TYPE: ${user.bloodType}', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14.sp)),
+              Container(
+                padding: EdgeInsets.all(6.r),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.r)),
+                child: const Icon(Icons.qr_code_2_rounded, size: 28, color: Color(0xFF1C1C1E)),
+              ),
             ],
           ),
         ],
@@ -155,52 +169,55 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _buildCardBack() {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       key: const ValueKey(true),
       width: double.infinity,
       height: 200.h,
       padding: EdgeInsets.all(24.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: DesignSystem.borderL,
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.primary.withOpacity(0.2)),
         boxShadow: DesignSystem.softShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('EMERGENCY CONTACT', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 14.sp)),
+          Text('EMERGENCY CONTACT', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary, fontSize: 14.sp)),
           SizedBox(height: 16.h),
           _buildInfoRow('Name', 'John Adams'),
           _buildInfoRow('Rel.', 'Spouse'),
           _buildInfoRow('Phone', '+1 234 567 890'),
           SizedBox(height: 16.h),
-          Text('ALLERGIES: Peanuts, Penicillin', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold, fontSize: 12.sp)),
+          Text('ALLERGIES: Peanuts, Penicillin', style: TextStyle(color: colorScheme.error, fontWeight: FontWeight.bold, fontSize: 12.sp)),
         ],
       ),
     );
   }
 
   Widget _buildInfoRow(String label, String value) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
         children: [
-          SizedBox(width: 50.w, child: Text(label, style: TextStyle(color: AppColors.textSecondary, fontSize: 13.sp))),
-          Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.sp)),
+          SizedBox(width: 50.w, child: Text(label, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13.sp))),
+          Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.sp, color: colorScheme.onSurface)),
         ],
       ),
     );
   }
 
   Widget _buildMenuSection(String title, List<Widget> items) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(left: 8.w, bottom: 12.h),
-          child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary, fontSize: 14.sp)),
+          child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurfaceVariant, fontSize: 14.sp)),
         ),
         MediCard(
           padding: EdgeInsets.zero,
@@ -211,10 +228,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+    final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
-      leading: Icon(icon, color: AppColors.primary, size: 22.sp),
-      title: Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500)),
-      trailing: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp, color: AppColors.textSecondary),
+      leading: Icon(icon, color: colorScheme.primary, size: 22.sp),
+      title: Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500, color: colorScheme.onSurface)),
+      trailing: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp, color: colorScheme.onSurfaceVariant),
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: DesignSystem.borderM),
     );

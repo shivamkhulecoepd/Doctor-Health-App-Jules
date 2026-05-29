@@ -12,8 +12,10 @@ class AuthGatewayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -25,10 +27,10 @@ class AuthGatewayScreen extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(12.r),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: colorScheme.primary.withOpacity(0.1),
                     borderRadius: DesignSystem.borderM,
                   ),
-                  child: Icon(Icons.shield_rounded, size: 32.sp, color: AppColors.primary),
+                  child: Icon(Icons.shield_rounded, size: 32.sp, color: colorScheme.primary),
                 ),
               ),
               SizedBox(height: 32.h),
@@ -46,7 +48,7 @@ class AuthGatewayScreen extends StatelessWidget {
                 delay: const Duration(milliseconds: 200),
                 child: Text(
                   'Your health journey starts here. Sign in to continue.',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 16.sp),
+                  style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 16.sp),
                 ),
               ),
               SizedBox(height: 48.h),
@@ -69,20 +71,20 @@ class AuthGatewayScreen extends StatelessWidget {
                 delay: const Duration(milliseconds: 200),
                 child: Row(
                   children: [
-                    const Expanded(child: Divider()),
+                    Expanded(child: Divider(color: colorScheme.outlineVariant)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(
                         'OR CONTINUE WITH',
                         style: TextStyle(
-                          color: AppColors.textSecondary.withOpacity(0.5),
+                          color: colorScheme.onSurfaceVariant.withOpacity(0.5),
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1,
                         ),
                       ),
                     ),
-                    const Expanded(child: Divider()),
+                    Expanded(child: Divider(color: colorScheme.outlineVariant)),
                   ],
                 ),
               ),
@@ -110,11 +112,11 @@ class AuthGatewayScreen extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         text: "Don't have an account? ",
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp),
-                        children: const [
+                        style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14.sp),
+                        children: [
                           TextSpan(
                             text: 'Sign Up',
-                            style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -139,21 +141,30 @@ class _SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       borderRadius: DesignSystem.borderM,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 16.h),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[200]!),
+          color: colorScheme.surface,
+          border: Border.all(color: colorScheme.outlineVariant),
           borderRadius: DesignSystem.borderM,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 20.sp),
+            Icon(icon, size: 20.sp, color: colorScheme.onSurface),
             SizedBox(width: 12.w),
-            Text(label, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp)),
+            Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14.sp,
+                color: colorScheme.onSurface,
+              ),
+            ),
           ],
         ),
       ),

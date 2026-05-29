@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,11 +8,13 @@ class MedicalRecordsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medical Records', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+        title: Text('Medical Records', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
         centerTitle: true,
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -22,25 +23,26 @@ class MedicalRecordsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildCategoryGrid(),
+            _buildCategoryGrid(context),
             SizedBox(height: 32.h),
-            Text('Recent Uploads', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+            Text('Recent Uploads', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
             SizedBox(height: 16.h),
-            _buildRecentList(),
+            _buildRecentList(context),
             SizedBox(height: 100.h),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: AppColors.primary,
-        child: Icon(Icons.add_rounded, color: Colors.white, size: 28.sp),
+        backgroundColor: colorScheme.primary,
+        child: Icon(Icons.add_rounded, color: colorScheme.onPrimary, size: 28.sp),
         elevation: 4,
       ),
     );
   }
 
-  Widget _buildCategoryGrid() {
+  Widget _buildCategoryGrid(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final categories = [
       {'name': 'Lab Reports', 'icon': Icons.biotech_rounded, 'color': Colors.blue},
       {'name': 'Prescriptions', 'icon': Icons.description_rounded, 'color': Colors.green},
@@ -76,7 +78,7 @@ class MedicalRecordsScreen extends StatelessWidget {
               children: [
                 Icon(category['icon'] as IconData, color: category['color'] as Color, size: 32.sp),
                 SizedBox(height: 8.h),
-                Text(category['name'] as String, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                Text(category['name'] as String, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp, color: colorScheme.onSurface)),
               ],
             ),
           ),
@@ -85,22 +87,23 @@ class MedicalRecordsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentList() {
+  Widget _buildRecentList(BuildContext context) {
     return Column(
       children: [
-        _buildRecordTile('Blood Test Result', 'Oct 10, 2023', 'PDF', Colors.red),
-        _buildRecordTile('Chest X-Ray', 'Oct 05, 2023', 'IMG', Colors.blue),
-        _buildRecordTile('Vaccination Card', 'Sep 20, 2023', 'PDF', Colors.green),
+        _buildRecordTile(context, 'Blood Test Result', 'Oct 10, 2023', 'PDF', Colors.red),
+        _buildRecordTile(context, 'Chest X-Ray', 'Oct 05, 2023', 'IMG', Colors.blue),
+        _buildRecordTile(context, 'Vaccination Card', 'Sep 20, 2023', 'PDF', Colors.green),
       ],
     );
   }
 
-  Widget _buildRecordTile(String title, String date, String type, Color color) {
+  Widget _buildRecordTile(BuildContext context, String title, String date, String type, Color color) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: DesignSystem.borderM,
         boxShadow: DesignSystem.softShadow,
       ),
@@ -116,16 +119,16 @@ class MedicalRecordsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp)),
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp, color: colorScheme.onSurface)),
                 SizedBox(height: 4.h),
-                Text(date, style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp)),
+                Text(date, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
               ],
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-            decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(4.r)),
-            child: Text(type, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+            decoration: BoxDecoration(color: colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(4.r)),
+            child: Text(type, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurfaceVariant)),
           ),
         ],
       ),

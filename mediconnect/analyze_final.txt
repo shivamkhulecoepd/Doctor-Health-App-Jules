@@ -103,4 +103,4 @@ warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • l
   error • Invalid constant value • lib/features/profile/screens/support_screen.dart:62:114 • invalid_constant
   error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/profile/screens/support_screen.dart:62:124 • undefined_getter
 
-102 issues found. (ran in 2.4s)
+102 issues found. (ran in 2.2s)

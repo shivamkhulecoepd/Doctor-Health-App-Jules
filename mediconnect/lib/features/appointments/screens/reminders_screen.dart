@@ -6,52 +6,59 @@ class RemindersSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Reminders')),
+      appBar: AppBar(
+        title: Text('Reminders', style: TextStyle(color: colorScheme.onSurface)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          _buildSectionHeader('Appointment Reminders'),
-          _buildReminderToggle('1 Day Before', true),
-          _buildReminderToggle('2 Hours Before', true),
-          _buildReminderToggle('30 Minutes Before', false),
+          _buildSectionHeader(context, 'Appointment Reminders'),
+          _buildReminderToggle(context, '1 Day Before', true),
+          _buildReminderToggle(context, '2 Hours Before', true),
+          _buildReminderToggle(context, '30 Minutes Before', false),
           const SizedBox(height: 30),
-          _buildSectionHeader('Medication Reminders'),
-          _buildReminderToggle('Morning Dose', true),
-          _buildReminderToggle('Afternoon Dose', false),
-          _buildReminderToggle('Evening Dose', true),
+          _buildSectionHeader(context, 'Medication Reminders'),
+          _buildReminderToggle(context, 'Morning Dose', true),
+          _buildReminderToggle(context, 'Afternoon Dose', false),
+          _buildReminderToggle(context, 'Evening Dose', true),
           const SizedBox(height: 30),
-          _buildSectionHeader('Health Goals'),
-          _buildReminderToggle('Daily Steps Goal', true),
-          _buildReminderToggle('Water Intake', false),
-          _buildReminderToggle('Sleep Tracker', true),
+          _buildSectionHeader(context, 'Health Goals'),
+          _buildReminderToggle(context, 'Daily Steps Goal', true),
+          _buildReminderToggle(context, 'Water Intake', false),
+          _buildReminderToggle(context, 'Sleep Tracker', true),
           const SizedBox(height: 40),
-          const ListTile(
-            title: Text('Notification Tone'),
-            subtitle: Text('Default (Medical Chime)'),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
+          ListTile(
+            title: Text('Notification Tone', style: TextStyle(color: colorScheme.onSurface)),
+            subtitle: Text('Default (Medical Chime)', style: TextStyle(color: colorScheme.onSurfaceVariant)),
+            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: colorScheme.onSurfaceVariant),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.primary)),
+      child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: colorScheme.primary)),
     );
   }
 
-  Widget _buildReminderToggle(String title, bool value) {
+  Widget _buildReminderToggle(BuildContext context, String title, bool value) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(16)),
       child: SwitchListTile(
-        title: Text(title),
+        title: Text(title, style: TextStyle(color: colorScheme.onSurface)),
         value: value,
         onChanged: (v) {},
-        activeColor: AppColors.primary,
+        activeColor: colorScheme.primary,
       ),
     );
   }

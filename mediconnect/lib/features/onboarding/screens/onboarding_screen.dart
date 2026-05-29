@@ -37,8 +37,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -48,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 child: TextButton(
                   onPressed: () => context.go('/auth'),
-                  child: Text('Skip', style: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp)),
+                  child: Text('Skip', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14.sp)),
                 ),
               ),
             ),
@@ -68,13 +71,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             height: 280.h,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.05),
+                              color: colorScheme.primary.withOpacity(0.05),
                               borderRadius: DesignSystem.borderL,
                             ),
                             child: Icon(
                               _data[index].icon,
                               size: 140.sp,
-                              color: AppColors.primary,
+                              color: colorScheme.primary,
                             ),
                           ),
                         ),
@@ -93,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             _data[index].description,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.textSecondary,
+                                  color: colorScheme.onSurfaceVariant,
                                   height: 1.5,
                                 ),
                           ),
@@ -118,7 +121,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 8.h,
                         width: _currentIndex == index ? 24.w : 8.w,
                         decoration: BoxDecoration(
-                          color: _currentIndex == index ? AppColors.primary : Colors.grey[300],
+                          color: _currentIndex == index ? colorScheme.primary : (isDark ? Colors.white24 : Colors.grey[300]),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                       ),

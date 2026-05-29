@@ -8,34 +8,40 @@ class VitalDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: Text('$type Detail')),
+      appBar: AppBar(
+        title: Text('$type Detail', style: TextStyle(color: colorScheme.onSurface)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildMainChart(),
+            _buildMainChart(context),
             const SizedBox(height: 30),
-            const Text('History', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text('History', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: colorScheme.onSurface)),
             const SizedBox(height: 15),
-            _buildHistoryItem('Oct 12', '82 bpm', 'Normal'),
-            _buildHistoryItem('Oct 11', '85 bpm', 'Slightly High'),
-            _buildHistoryItem('Oct 10', '78 bpm', 'Normal'),
-            _buildHistoryItem('Oct 09', '80 bpm', 'Normal'),
+            _buildHistoryItem(context, 'Oct 12', '82 bpm', 'Normal'),
+            _buildHistoryItem(context, 'Oct 11', '85 bpm', 'Slightly High'),
+            _buildHistoryItem(context, 'Oct 10', '78 bpm', 'Normal'),
+            _buildHistoryItem(context, 'Oct 09', '80 bpm', 'Normal'),
             const SizedBox(height: 40),
-            _buildGoalSection(),
+            _buildGoalSection(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMainChart() {
+  Widget _buildMainChart(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       height: 300,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(24)),
       child: LineChart(
         LineChartData(
           lineBarsData: [
@@ -50,57 +56,70 @@ class VitalDetailView extends StatelessWidget {
                 FlSpot(6, 80),
               ],
               isCurved: true,
-              color: AppColors.primary,
+              color: colorScheme.primary,
               barWidth: 4,
               dotData: const FlDotData(show: true),
-              belowBarData: BarAreaData(show: true, color: AppColors.primary.withOpacity(0.1)),
+              belowBarData: BarAreaData(show: true, color: colorScheme.primary.withOpacity(0.1)),
             ),
           ],
-          titlesData: const FlTitlesData(
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40)),
-            bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10)),
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10)),
+              ),
+            ),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHistoryItem(String date, String value, String status) {
+  Widget _buildHistoryItem(BuildContext context, String date, String value, String status) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(16)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(date, style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
-          Text(status, style: TextStyle(color: status == 'Normal' ? AppColors.secondary : Colors.orange, fontSize: 12)),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w500, color: colorScheme.onSurface)),
+          Text(value, style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary)),
+          Text(status, style: TextStyle(color: status == 'Normal' ? colorScheme.secondary : colorScheme.tertiary, fontSize: 12)),
         ],
       ),
     );
   }
 
-  Widget _buildGoalSection() {
+  Widget _buildGoalSection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(color: colorScheme.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Your Goal', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('Your Goal', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Maintain 70-80 bpm', style: TextStyle(color: AppColors.textSecondary)),
-              Text('85%', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+              Text('Maintain 70-80 bpm', style: TextStyle(color: colorScheme.onSurfaceVariant)),
+              Text('85%', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary)),
             ],
           ),
           const SizedBox(height: 10),
-          LinearProgressIndicator(value: 0.85, backgroundColor: Colors.white, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)),
+          LinearProgressIndicator(value: 0.85, backgroundColor: colorScheme.surface, valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary)),
         ],
       ),
     );

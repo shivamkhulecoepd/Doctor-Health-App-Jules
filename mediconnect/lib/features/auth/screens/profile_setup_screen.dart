@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
   const ProfileSetupScreen({super.key});
@@ -15,23 +17,27 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Setup'),
+        title: Text('Profile Setup', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Column(
         children: [
           _buildStepIndicator(),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(30),
+              padding: EdgeInsets.all(30.w),
               child: _buildStepContent(),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(30),
-            child: ElevatedButton(
+            padding: EdgeInsets.all(30.w),
+            child: MediButton(
               onPressed: () {
                 if (_currentStep < 2) {
                   setState(() => _currentStep++);
@@ -39,13 +45,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   context.go('/home');
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 56),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
-              child: Text(_currentStep == 2 ? 'Finish' : 'Next'),
+              text: _currentStep == 2 ? 'Finish' : 'Next',
             ),
           ),
         ],
@@ -54,35 +54,37 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   }
 
   Widget _buildStepIndicator() {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(vertical: 20.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(3, (index) {
           return Row(
             children: [
               Container(
-                width: 30,
-                height: 30,
+                width: 32.w,
+                height: 32.w,
                 decoration: BoxDecoration(
-                  color: _currentStep >= index ? AppColors.primary : Colors.grey[300],
+                  color: _currentStep >= index ? colorScheme.primary : colorScheme.surfaceVariant,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: Text(
                     '${index + 1}',
                     style: TextStyle(
-                      color: _currentStep >= index ? Colors.white : Colors.grey[600],
+                      color: _currentStep >= index ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ),
               ),
               if (index < 2)
                 Container(
-                  width: 40,
-                  height: 2,
-                  color: _currentStep > index ? AppColors.primary : Colors.grey[300],
+                  width: 40.w,
+                  height: 2.h,
+                  color: _currentStep > index ? colorScheme.primary : colorScheme.surfaceVariant,
                 ),
             ],
           );
@@ -92,22 +94,27 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   }
 
   Widget _buildStepContent() {
+    final colorScheme = Theme.of(context).colorScheme;
     switch (_currentStep) {
       case 0:
         return FadeIn(
           child: Column(
             children: [
-              const CircleAvatar(
-                radius: 60,
-                backgroundColor: AppColors.background,
-                child: Icon(Icons.camera_alt, size: 40, color: AppColors.textSecondary),
+              Container(
+                width: 120.w,
+                height: 120.w,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.camera_alt, size: 40.sp, color: colorScheme.primary),
               ),
-              const SizedBox(height: 40),
-              _buildTextField('Full Name', Icons.person_outline),
-              const SizedBox(height: 20),
-              _buildTextField('Date of Birth', Icons.calendar_today_outlined),
-              const SizedBox(height: 20),
-              _buildTextField('Gender', Icons.male_outlined),
+              SizedBox(height: 40.h),
+              const MediTextField(hintText: 'Full Name', prefixIcon: Icons.person_outline),
+              SizedBox(height: 20.h),
+              const MediTextField(hintText: 'Date of Birth', prefixIcon: Icons.calendar_today_outlined),
+              SizedBox(height: 20.h),
+              const MediTextField(hintText: 'Gender', prefixIcon: Icons.male_outlined),
             ],
           ),
         );
@@ -115,13 +122,13 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
         return FadeIn(
           child: Column(
             children: [
-              _buildTextField('Weight (kg)', Icons.monitor_weight_outlined),
-              const SizedBox(height: 20),
-              _buildTextField('Height (cm)', Icons.height),
-              const SizedBox(height: 20),
-              _buildTextField('Blood Type', Icons.bloodtype_outlined),
-              const SizedBox(height: 20),
-              _buildTextField('Allergies', Icons.warning_amber_outlined),
+              const MediTextField(hintText: 'Weight (kg)', prefixIcon: Icons.monitor_weight_outlined),
+              SizedBox(height: 20.h),
+              const MediTextField(hintText: 'Height (cm)', prefixIcon: Icons.height),
+              SizedBox(height: 20.h),
+              const MediTextField(hintText: 'Blood Type', prefixIcon: Icons.bloodtype_outlined),
+              SizedBox(height: 20.h),
+              const MediTextField(hintText: 'Allergies', prefixIcon: Icons.warning_amber_outlined),
             ],
           ),
         );
@@ -129,28 +136,28 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
         return FadeIn(
           child: Column(
             children: [
-              const Text(
+              Text(
                 'Almost there!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.displaySmall,
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20.h),
+              Text(
                 'Choose your notification preferences and medical data sharing options.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.textSecondary),
+                style: TextStyle(color: colorScheme.onSurfaceVariant),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 40.h),
               SwitchListTile(
                 value: true,
                 onChanged: (v) {},
-                title: const Text('Push Notifications'),
-                activeColor: AppColors.primary,
+                title: Text('Push Notifications', style: TextStyle(color: colorScheme.onSurface)),
+                activeColor: colorScheme.primary,
               ),
               SwitchListTile(
                 value: true,
                 onChanged: (v) {},
-                title: const Text('Health Data Sync'),
-                activeColor: AppColors.primary,
+                title: Text('Health Data Sync', style: TextStyle(color: colorScheme.onSurface)),
+                activeColor: colorScheme.primary,
               ),
             ],
           ),
@@ -158,33 +165,5 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       default:
         return Container();
     }
-  }
-
-  Widget _buildTextField(String label, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon, color: AppColors.primary),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-        ),
-      ),
-    );
   }
 }

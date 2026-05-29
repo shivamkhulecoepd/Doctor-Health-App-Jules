@@ -14,31 +14,36 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Symptom Checker')),
+      appBar: AppBar(
+        title: Text('Symptom Checker', style: TextStyle(color: colorScheme.onSurface)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Text('Where do you feel discomfort?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text('Where do you feel discomfort?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: colorScheme.onSurface)),
             const SizedBox(height: 20),
             // Placeholder for Body Map SVG
             Container(
               height: 300,
               width: 200,
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              child: const Center(child: Icon(Icons.accessibility_new, size: 150, color: AppColors.primary)),
+              decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(20)),
+              child: Center(child: Icon(Icons.accessibility_new, size: 150, color: colorScheme.primary)),
             ),
             const SizedBox(height: 30),
-            _buildSymptomSelection(),
+            _buildSymptomSelection(context),
             const SizedBox(height: 30),
-            _buildSeveritySlider(),
+            _buildSeveritySlider(context),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
                 minimumSize: const Size(double.infinity, 56),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
@@ -50,7 +55,8 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
     );
   }
 
-  Widget _buildSymptomSelection() {
+  Widget _buildSymptomSelection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final symptoms = ['Headache', 'Fever', 'Cough', 'Chest Pain', 'Nausea', 'Fatigue'];
     return Wrap(
       spacing: 10,
@@ -69,29 +75,32 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
               }
             });
           },
-          selectedColor: AppColors.primary,
-          labelStyle: TextStyle(color: isSelected ? Colors.white : AppColors.textPrimary),
+          selectedColor: colorScheme.primary,
+          labelStyle: TextStyle(color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface),
+          backgroundColor: colorScheme.surface,
+          checkmarkColor: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
         );
       }).toList(),
     );
   }
 
-  Widget _buildSeveritySlider() {
+  Widget _buildSeveritySlider(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Severity', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('${(_severity * 10).toInt()}/10', style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.error)),
+            Text('Severity', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
+            Text('${(_severity * 10).toInt()}/10', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.error)),
           ],
         ),
         Slider(
           value: _severity,
           onChanged: (v) => setState(() => _severity = v),
           activeColor: Color.lerp(Colors.green, Colors.red, _severity),
-          inactiveColor: Colors.grey[200],
+          inactiveColor: colorScheme.outlineVariant,
         ),
       ],
     );

@@ -9,16 +9,18 @@ class NotificationsCenterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+        title: Text('Notifications', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
         centerTitle: true,
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           TextButton(
             onPressed: () {},
-            child: Text('Clear All', style: TextStyle(color: AppColors.error, fontSize: 14.sp)),
+            child: Text('Clear All', style: TextStyle(color: colorScheme.error, fontSize: 14.sp)),
           ),
         ],
       ),
@@ -34,10 +36,10 @@ class NotificationsCenterScreen extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 16.h),
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colorScheme.surface,
                 borderRadius: DesignSystem.borderM,
                 boxShadow: DesignSystem.softShadow,
-                border: isCritical ? Border(left: BorderSide(color: AppColors.error, width: 4.w)) : null,
+                border: isCritical ? Border(left: BorderSide(color: colorScheme.error, width: 4.w)) : null,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,12 +47,12 @@ class NotificationsCenterScreen extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(10.r),
                     decoration: BoxDecoration(
-                      color: (isCritical ? AppColors.error : AppColors.primary).withValues(alpha: 0.1),
+                      color: (isCritical ? colorScheme.error : colorScheme.primary).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       isCritical ? Icons.warning_amber_rounded : Icons.notifications_none_rounded,
-                      color: isCritical ? AppColors.error : AppColors.primary,
+                      color: isCritical ? colorScheme.error : colorScheme.primary,
                       size: 20.sp,
                     ),
                   ),
@@ -64,9 +66,9 @@ class NotificationsCenterScreen extends StatelessWidget {
                           children: [
                             Text(
                               isCritical ? 'Critical Health Alert' : 'Appointment Reminder',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp, color: colorScheme.onSurface),
                             ),
-                            Text('2m ago', style: TextStyle(color: AppColors.textSecondary, fontSize: 11.sp)),
+                            Text('2m ago', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 11.sp)),
                           ],
                         ),
                         SizedBox(height: 6.h),
@@ -74,7 +76,7 @@ class NotificationsCenterScreen extends StatelessWidget {
                           isCritical
                             ? 'Your heart rate exceeded 100bpm while resting. Please contact your doctor.'
                             : 'Your consultation with Dr. Maria Elena starts in 30 minutes.',
-                          style: TextStyle(color: AppColors.textSecondary, fontSize: 13.sp, height: 1.4),
+                          style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13.sp, height: 1.4),
                         ),
                       ],
                     ),

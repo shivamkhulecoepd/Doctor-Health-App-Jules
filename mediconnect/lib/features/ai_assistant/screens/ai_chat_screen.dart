@@ -31,15 +31,19 @@ class _AIChatScreenState extends State<AIChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            CircleAvatar(radius: 15, backgroundColor: AppColors.primary, child: Icon(Icons.auto_awesome, color: Colors.white, size: 18)),
-            SizedBox(width: 10),
-            Text('AI Assistant'),
+            CircleAvatar(radius: 15, backgroundColor: colorScheme.primary, child: const Icon(Icons.auto_awesome, color: Colors.white, size: 18)),
+            const SizedBox(width: 10),
+            Text('AI Assistant', style: TextStyle(color: colorScheme.onSurface)),
           ],
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -58,7 +62,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                       padding: const EdgeInsets.all(15),
                       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
                       decoration: BoxDecoration(
-                        color: message.isUser ? AppColors.primary : Colors.white,
+                        color: message.isUser ? colorScheme.primary : colorScheme.surface,
                         borderRadius: BorderRadius.circular(20).copyWith(
                           bottomRight: message.isUser ? const Radius.circular(0) : const Radius.circular(20),
                           bottomLeft: message.isUser ? const Radius.circular(20) : const Radius.circular(0),
@@ -67,7 +71,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                       ),
                       child: Text(
                         message.text,
-                        style: TextStyle(color: message.isUser ? Colors.white : AppColors.textPrimary),
+                        style: TextStyle(color: message.isUser ? colorScheme.onPrimary : colorScheme.onSurface),
                       ),
                     ),
                   ),
@@ -75,26 +79,29 @@ class _AIChatScreenState extends State<AIChatScreen> {
               },
             ),
           ),
-          _buildInputArea(),
+          _buildInputArea(context),
         ],
       ),
     );
   }
 
-  Widget _buildInputArea() {
+  Widget _buildInputArea(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: colorScheme.surface),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _controller,
+              style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 hintText: 'Type your symptoms...',
+                hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
                 filled: true,
-                fillColor: Colors.grey[100],
+                fillColor: colorScheme.surfaceVariant.withOpacity(0.3),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
             ),
@@ -102,8 +109,8 @@ class _AIChatScreenState extends State<AIChatScreen> {
           const SizedBox(width: 10),
           IconButton(
             onPressed: _sendMessage,
-            icon: const Icon(Icons.send, color: AppColors.primary),
-            style: IconButton.styleFrom(backgroundColor: AppColors.primary.withOpacity(0.1)),
+            icon: Icon(Icons.send, color: colorScheme.primary),
+            style: IconButton.styleFrom(backgroundColor: colorScheme.primary.withOpacity(0.1)),
           ),
         ],
       ),
