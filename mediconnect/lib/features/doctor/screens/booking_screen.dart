@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -310,7 +311,7 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
               Text(
                 'Your consultation with Dr. Maria Elena is confirmed for Oct 12 at 09:00 AM.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.textSecondary, height: 1.5, fontSize: 14.sp),
+                style: TextStyle(color: Color(0xFF8E8E93), height: 1.5, fontSize: 14.sp),
               ),
               SizedBox(height: 32.h),
               MediButton(

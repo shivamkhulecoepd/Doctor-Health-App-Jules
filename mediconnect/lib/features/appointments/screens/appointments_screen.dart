@@ -73,7 +73,7 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> with Si
       itemBuilder: (context, index) {
         return _buildAppointmentCard(
           status: 'Completed',
-          statusColor: AppColors.textSecondary,
+          statusColor: Color(0xFF8E8E93),
           date: 'Sep 15, 2023 - 09:00 AM',
         );
       },

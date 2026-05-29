@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -113,7 +114,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             child: child,
           );
         },
-        child: _isCardFlipped ? _buildCardBack() : _buildCardFront(),
+        child: _isCardFlipped ? _buildCardBack() : _buildCardFront(user),
       ),
     );
   }
