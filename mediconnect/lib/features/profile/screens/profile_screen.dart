@@ -5,55 +5,34 @@ import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconnect/features/profile/providers/user_provider.dart';
+import 'package:go_router/go_router.dart';
 
-class UserProfileScreen extends ConsumerStatefulWidget {
+class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
 
   @override
-  ConsumerState<UserProfileScreen> createState() => _UserProfileScreenState();
-}
-
-class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
-  bool _isCardFlipped = false;
-
-  @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-    final colorScheme = Theme.of(context).colorScheme;
+    final user = MockDataService.currentUser;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text('Profile'),
+        actions: [
+          IconButton(onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings_outlined)),
+          SizedBox(width: 8.w),
+        ],
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(AppSpacing.s24),
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
             _buildProfileHeader(user),
-            SizedBox(height: 32.h),
-            _buildHealthIDCard(user),
-            SizedBox(height: 32.h),
-            _buildMenuSection('General', [
-              _buildMenuItem(Icons.person_outline_rounded, 'Personal Information', () {}),
-              _buildMenuItem(Icons.family_restroom_rounded, 'Family Management', () {}),
-              _buildMenuItem(Icons.history_rounded, 'Medical History', () {}),
-            ]),
-            SizedBox(height: 24.h),
-            _buildMenuSection('Preferences', [
-              _buildMenuItem(Icons.settings_outlined, 'Settings', () => context.push('/settings')),
-              _buildMenuItem(Icons.lock_outline_rounded, 'Privacy & Security', () => context.push('/privacy')),
-              _buildMenuItem(Icons.help_outline_rounded, 'Help & Support', () => context.push('/support')),
-            ]),
-            SizedBox(height: 32.h),
-            TextButton(
-              onPressed: () {},
-              child: Text('Sign Out', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold, fontSize: 16.sp)),
-            ),
+            SizedBox(height: AppSpacing.s32),
+            _buildStatsRow(user),
+            SizedBox(height: AppSpacing.s32),
+            _buildMenu(context, isDark),
             SizedBox(height: 100.h),
           ],
         ),
@@ -61,32 +40,29 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
     );
   }
 
-  Widget _buildProfileHeader(UserProfile user) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildProfileHeader(user) {
     return Column(
       children: [
         Stack(
           children: [
-            Container(
-              padding: EdgeInsets.all(4.r),
-              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: colorScheme.primary, width: 2)),
-              child: CircleAvatar(radius: 50.r, backgroundImage: NetworkImage(user.imageUrl)),
+            CircleAvatar(
+              radius: 50.r,
+              backgroundImage: NetworkImage(user.imageUrl),
             ),
             Positioned(
               bottom: 0,
               right: 0,
               child: Container(
-                padding: EdgeInsets.all(8.r),
-                decoration: BoxDecoration(color: colorScheme.primary, shape: BoxShape.circle),
-                child: Icon(Icons.camera_alt_rounded, color: colorScheme.onPrimary, size: 16.sp),
+                padding: EdgeInsets.all(6.r),
+                decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 16.sp),
               ),
             ),
           ],
         ),
         SizedBox(height: 16.h),
-        Text(user.name, style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-        SizedBox(height: 4.h),
-        Text('ID: ${user.id}', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14.sp)),
+        Text(user.name, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700)),
+        Text(user.email, style: TextStyle(color: AppColors.textSecondaryLight, fontSize: 14.sp)),
       ],
     );
   }
@@ -119,123 +95,45 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
     );
   }
 
-  Widget _buildCardFront(UserProfile user) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      key: const ValueKey(false),
-      width: double.infinity,
-      height: 200.h,
-      padding: EdgeInsets.all(24.r),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [colorScheme.primary, colorScheme.primary.withBlue(255).withRed(0)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: DesignSystem.borderL,
-        boxShadow: DesignSystem.premiumShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('HEALTH ID CARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1.5, fontSize: 12.sp)),
-              Icon(Icons.medical_services_rounded, color: Colors.white.withOpacity(0.5), size: 24.sp),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(user.name.toUpperCase(), style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold, letterSpacing: 1)),
-              Text('DOB: ${user.dob}', style: TextStyle(color: Colors.white70, fontSize: 12.sp)),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('BLOOD TYPE: ${user.bloodType}', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14.sp)),
-              Container(
-                padding: EdgeInsets.all(6.r),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.r)),
-                child: const Icon(Icons.qr_code_2_rounded, size: 28, color: Color(0xFF1C1C1E)),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCardBack() {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      key: const ValueKey(true),
-      width: double.infinity,
-      height: 200.h,
-      padding: EdgeInsets.all(24.r),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: DesignSystem.borderL,
-        border: Border.all(color: colorScheme.primary.withOpacity(0.2)),
-        boxShadow: DesignSystem.softShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('EMERGENCY CONTACT', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary, fontSize: 14.sp)),
-          SizedBox(height: 16.h),
-          _buildInfoRow('Name', 'John Adams'),
-          _buildInfoRow('Rel.', 'Spouse'),
-          _buildInfoRow('Phone', '+1 234 567 890'),
-          SizedBox(height: 16.h),
-          Text('ALLERGIES: Peanuts, Penicillin', style: TextStyle(color: colorScheme.error, fontWeight: FontWeight.bold, fontSize: 12.sp)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.only(bottom: 4.h),
-      child: Row(
-        children: [
-          SizedBox(width: 50.w, child: Text(label, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13.sp))),
-          Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.sp, color: colorScheme.onSurface)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuSection(String title, List<Widget> items) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildStatItem(String label, int value) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w, bottom: 12.h),
-          child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurfaceVariant, fontSize: 14.sp)),
-        ),
-        MediCard(
-          padding: EdgeInsets.zero,
-          child: Column(children: items),
-        ),
+        Text('$value', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700, color: AppColors.primary)),
+        Text(label, style: TextStyle(fontSize: 12.sp, color: AppColors.textSecondaryLight)),
       ],
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildStatDivider() {
+    return Container(height: 24.h, width: 1, color: AppColors.textSecondaryLight.withOpacity(0.2));
+  }
+
+  Widget _buildMenu(BuildContext context, bool isDark) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.cardDark : Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Column(
+        children: [
+          _buildMenuItem(Icons.person_outline_rounded, 'Edit Profile', () {}),
+          _buildMenuItem(Icons.payment_rounded, 'Payment', () {}),
+          _buildMenuItem(Icons.notifications_none_rounded, 'Notifications', () => context.push('/notifications')),
+          _buildMenuItem(Icons.lock_outline_rounded, 'Privacy', () => context.push('/privacy')),
+          _buildMenuItem(Icons.help_outline_rounded, 'Help', () => context.push('/support')),
+          _buildMenuItem(Icons.logout_rounded, 'Logout', () {}, isLast: true, color: AppColors.error),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap, {bool isLast = false, Color? color}) {
     return ListTile(
-      leading: Icon(icon, color: colorScheme.primary, size: 22.sp),
-      title: Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500, color: colorScheme.onSurface)),
-      trailing: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp, color: colorScheme.onSurfaceVariant),
       onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: DesignSystem.borderM),
+      leading: Icon(icon, color: color ?? AppColors.primary, size: 22.sp),
+      title: Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: color)),
+      trailing: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp, color: AppColors.textSecondaryLight.withOpacity(0.5)),
+      shape: !isLast ? Border(bottom: BorderSide(color: AppColors.textSecondaryLight.withOpacity(0.1))) : null,
     );
   }
 }

@@ -4,7 +4,8 @@ import 'package:mediconnect/core/theme/app_theme.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class BookingFlowScreen extends StatefulWidget {
   final String doctorId;
@@ -15,281 +16,132 @@ class BookingFlowScreen extends StatefulWidget {
 }
 
 class _BookingFlowScreenState extends State<BookingFlowScreen> {
-  int _currentStep = 0;
-  String _selectedSlot = '';
-  final List<String> _slots = ['09:00 AM', '10:30 AM', '01:00 PM', '02:30 PM', '04:00 PM'];
+  DateTime _selectedDate = DateTime.now();
+  String _selectedTime = '09:00 AM';
+
+  final List<String> _timeSlots = [
+    '09:00 AM', '10:00 AM', '11:00 AM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final doctor = MockDataService.doctors.firstWhere((d) => d.id == widget.doctorId);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Book Appointment', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: Column(
-        children: [
-          _buildProgressBar(context),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _buildStepContent(context),
+      appBar: AppBar(title: const Text('Book Appointment')),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(AppSpacing.s24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDoctorMiniCard(doctor, isDark),
+            SizedBox(height: AppSpacing.s32),
+            Text('Select Date', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700)),
+            SizedBox(height: 16.h),
+            _buildDateSelector(isDark),
+            SizedBox(height: AppSpacing.s32),
+            Text('Select Time', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700)),
+            SizedBox(height: 16.h),
+            _buildTimeGrid(isDark),
+            SizedBox(height: 48.h),
+            PrimaryButton(
+              text: 'Confirm Booking',
+              onPressed: () => _showSuccessDialog(context),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDoctorMiniCard(doctor, bool isDark) {
+    return Container(
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.cardDark : Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: isDark ? null : [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(radius: 24.r, backgroundImage: NetworkImage(doctor.imageUrl)),
+          SizedBox(width: 12.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(doctor.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              Text(doctor.specialty, style: TextStyle(color: AppColors.textSecondaryLight, fontSize: 13.sp)),
+            ],
           ),
-          _buildBottomBar(context),
         ],
       ),
     );
   }
 
-  Widget _buildProgressBar(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
-      child: Row(
-        children: List.generate(3, (index) {
-          final isActive = _currentStep >= index;
-          return Expanded(
-            child: Row(
-              children: [
-                Container(
-                  width: 28.w,
-                  height: 28.w,
-                  decoration: BoxDecoration(
-                    color: isActive ? colorScheme.primary : colorScheme.surfaceVariant,
-                    shape: BoxShape.circle,
-                    boxShadow: isActive ? DesignSystem.softShadow : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${index + 1}',
-                      style: TextStyle(color: isActive ? colorScheme.onPrimary : colorScheme.onSurfaceVariant, fontSize: 12.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                if (index < 2)
-                  Expanded(
-                    child: Container(
-                      height: 2.h,
-                      color: _currentStep > index ? colorScheme.primary : colorScheme.surfaceVariant,
-                    ),
-                  ),
-              ],
+  Widget _buildDateSelector(bool isDark) {
+    return SizedBox(
+      height: 90.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: 14,
+        itemBuilder: (context, index) {
+          final date = DateTime.now().add(Duration(days: index));
+          final isSelected = _selectedDate.day == date.day;
+          return GestureDetector(
+            onTap: () => setState(() => _selectedDate = date),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 64.w,
+              margin: EdgeInsets.only(right: 12.w),
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primary : (isDark ? AppColors.cardDark : const Color(0xFFF4F6FF)),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(DateFormat('E').format(date), style: TextStyle(color: isSelected ? Colors.white70 : AppColors.textSecondaryLight, fontSize: 12.sp)),
+                  SizedBox(height: 4.h),
+                  Text(DateFormat('dd').format(date), style: TextStyle(color: isSelected ? Colors.white : null, fontWeight: FontWeight.bold, fontSize: 18.sp)),
+                ],
+              ),
             ),
           );
-        }),
+        },
       ),
     );
   }
 
-  Widget _buildStepContent(BuildContext context) {
-    switch (_currentStep) {
-      case 0: return _buildDateTimeStep(context);
-      case 1: return _buildConsultationTypeStep(context);
-      case 2: return _buildPaymentStep(context);
-      default: return Container();
-    }
-  }
-
-  Widget _buildDateTimeStep(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(24.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Select Date', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-          SizedBox(height: 16.h),
-          MediCard(
-            padding: EdgeInsets.zero,
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: colorScheme.copyWith(
-                  onSurface: colorScheme.onSurface,
-                ),
-              ),
-              child: CalendarDatePicker(
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 30)),
-                onDateChanged: (date) {},
-              ),
-            ),
-          ),
-          SizedBox(height: 32.h),
-          Text('Available Time Slots', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-          SizedBox(height: 16.h),
-          Wrap(
-            spacing: 12.w,
-            runSpacing: 12.h,
-            children: _slots.map((slot) {
-              final isSelected = _selectedSlot == slot;
-              return GestureDetector(
-                onTap: () => setState(() => _selectedSlot = slot),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-                  decoration: BoxDecoration(
-                    color: isSelected ? colorScheme.primary : colorScheme.surface,
-                    borderRadius: DesignSystem.borderM,
-                    border: Border.all(color: isSelected ? colorScheme.primary : colorScheme.outlineVariant),
-                    boxShadow: isSelected ? DesignSystem.softShadow : null,
-                  ),
-                  child: Text(
-                    slot,
-                    style: TextStyle(
-                      color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildConsultationTypeStep(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.all(24.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Select Consultation Type', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-          SizedBox(height: 24.h),
-          _buildTypeCard(context, 'In-Clinic Visit', 'Physical consultation at hospital', Icons.home_work_rounded, true),
-          SizedBox(height: 16.h),
-          _buildTypeCard(context, 'Online Consultation', 'Secure video call via app', Icons.videocam_rounded, false),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTypeCard(BuildContext context, String title, String subtitle, IconData icon, bool isSelected) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return MediCard(
-      padding: EdgeInsets.all(20.r),
-      onTap: () {},
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(12.r),
+  Widget _buildTimeGrid(bool isDark) {
+    return Wrap(
+      spacing: 12.w,
+      runSpacing: 12.h,
+      children: _timeSlots.map((time) {
+        final isSelected = _selectedTime == time;
+        return GestureDetector(
+          onTap: () => setState(() => _selectedTime = time),
+          child: Container(
+            width: 100.w,
+            padding: EdgeInsets.symmetric(vertical: 12.h),
             decoration: BoxDecoration(
-              color: isSelected ? colorScheme.primary : colorScheme.surfaceVariant,
-              borderRadius: DesignSystem.borderM,
+              color: isSelected ? AppColors.primary : (isDark ? AppColors.cardDark : Colors.white),
+              borderRadius: BorderRadius.circular(12.r),
+              border: isSelected ? null : Border.all(color: AppColors.textSecondaryLight.withOpacity(0.2)),
             ),
-            child: Icon(icon, color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant, size: 24.sp),
-          ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, color: colorScheme.onSurface)),
-                Text(subtitle, style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
-              ],
+            alignment: Alignment.center,
+            child: Text(
+              time,
+              style: TextStyle(color: isSelected ? Colors.white : null, fontWeight: FontWeight.w600, fontSize: 13.sp),
             ),
           ),
-          if (isSelected) Icon(Icons.check_circle_rounded, color: colorScheme.primary, size: 24.sp),
-        ],
-      ),
+        );
+      }).toList(),
     );
   }
 
-  Widget _buildPaymentStep(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.all(24.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Order Summary', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-          SizedBox(height: 16.h),
-          MediCard(
-            child: Column(
-              children: [
-                _buildSummaryRow(context, 'Consultation Fee', '\$50.00'),
-                SizedBox(height: 12.h),
-                _buildSummaryRow(context, 'Service Fee', '\$2.50'),
-                Divider(height: 32.h, color: colorScheme.outlineVariant),
-                _buildSummaryRow(context, 'Total', '\$52.50', isTotal: true),
-              ],
-            ),
-          ),
-          SizedBox(height: 32.h),
-          Text('Payment Method', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-          SizedBox(height: 16.h),
-          MediCard(
-            onTap: () {},
-            child: Row(
-              children: [
-                Icon(Icons.credit_card_rounded, color: colorScheme.primary),
-                SizedBox(width: 16.w),
-                Text('**** **** **** 4242', style: TextStyle(fontWeight: FontWeight.w600, color: colorScheme.onSurface)),
-                const Spacer(),
-                Icon(Icons.keyboard_arrow_down_rounded, color: colorScheme.onSurfaceVariant),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(BuildContext context, String label, String value, {bool isTotal = false}) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: TextStyle(color: isTotal ? colorScheme.onSurface : colorScheme.onSurfaceVariant, fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
-        Text(value, style: TextStyle(color: isTotal ? colorScheme.primary : colorScheme.onSurface, fontWeight: FontWeight.bold, fontSize: isTotal ? 18.sp : 14.sp)),
-      ],
-    );
-  }
-
-  Widget _buildBottomBar(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 40.h),
-      decoration: BoxDecoration(color: colorScheme.surface, boxShadow: DesignSystem.softShadow),
-      child: Row(
-        children: [
-          if (_currentStep > 0)
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(right: 16.w),
-                child: MediButton(
-                  text: 'Back',
-                  isPrimary: false,
-                  onPressed: () => setState(() => _currentStep--),
-                ),
-              ),
-            ),
-          Expanded(
-            flex: 2,
-            child: MediButton(
-              text: _currentStep == 2 ? 'Confirm & Pay' : 'Next Step',
-              onPressed: () {
-                if (_currentStep < 2) {
-                  setState(() => _currentStep++);
-                } else {
-                  _showSuccessDialog();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSuccessDialog() {
+  void _showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,

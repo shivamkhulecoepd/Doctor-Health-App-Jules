@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mediconnect/core/theme/design_system.dart';
-import 'package:mediconnect/core/widgets/premium_widgets.dart';
-import 'package:animate_do/animate_do.dart';
+import 'package:mediconnect/core/services/mock_data_service.dart';
+import 'package:mediconnect/core/theme/app_colors.dart';
+import 'package:mediconnect/core/theme/app_spacing.dart';
+import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
+import 'package:mediconnect/shared/widgets/doctor_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class DoctorSearchScreen extends StatefulWidget {
   const DoctorSearchScreen({super.key});
@@ -18,130 +20,70 @@ class _DoctorSearchScreenState extends State<DoctorSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final doctors = MockDataService.doctors;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Find Doctors', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text('Find Doctors'),
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(20.w),
-            child: const MediTextField(
-              hintText: 'Search doctors, clinic...',
-              prefixIcon: Icons.search_rounded,
-            ),
+            padding: EdgeInsets.all(AppSpacing.s24),
+            child: const AppSearchBar(hintText: 'Search doctor or clinic...'),
           ),
           SizedBox(
             height: 40.h,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.s24),
               itemCount: _filters.length,
               itemBuilder: (context, index) {
                 final isSelected = _selectedFilter == index;
                 return Padding(
                   padding: EdgeInsets.only(right: 12.w),
-                  child: FilterChip(
-                    label: Text(_filters[index]),
-                    selected: isSelected,
-                    onSelected: (selected) => setState(() => _selectedFilter = index),
-                    selectedColor: colorScheme.primary,
-                    labelStyle: TextStyle(
-                      color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
-                      fontSize: 13.sp,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  child: GestureDetector(
+                    onTap: () => setState(() => _selectedFilter = index),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.primary : Colors.transparent,
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(color: isSelected ? AppColors.primary : AppColors.textSecondaryLight.withOpacity(0.3)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        _filters[index],
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : AppColors.textSecondaryLight,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13.sp,
+                        ),
+                      ),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-                    backgroundColor: colorScheme.surface,
-                    side: BorderSide(color: isSelected ? colorScheme.primary : colorScheme.outlineVariant),
-                    showCheckmark: false,
                   ),
                 );
               },
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: AppSpacing.s24),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              itemCount: 5,
-              physics: const BouncingScrollPhysics(),
+            child: GridView.builder(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.s24),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16.h,
+                crossAxisSpacing: 16.w,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: doctors.length,
               itemBuilder: (context, index) {
-                return FadeInUp(
-                  delay: Duration(milliseconds: index * 100),
-                  child: _buildDoctorCard(context, index),
+                return DoctorCard(
+                  doctor: doctors[index],
+                  onTap: () => context.push('/doctor/${doctors[index].id}'),
+                  onBookTap: () => context.push('/booking/${doctors[index].id}'),
                 );
               },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text('Map View', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp, color: colorScheme.onInverseSurface)),
-        icon: Icon(Icons.map_rounded, color: colorScheme.onInverseSurface, size: 20.sp),
-        backgroundColor: colorScheme.inverseSurface,
-        elevation: 4,
-      ),
-    );
-  }
-
-  Widget _buildDoctorCard(BuildContext context, int index) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return MediCard(
-      padding: EdgeInsets.all(12.r),
-      onTap: () => context.push('/doctor/doc_$index'),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: DesignSystem.borderM,
-                child: Image.network('https://i.pravatar.cc/150?u=doc$index', width: 90.w, height: 90.w, fit: BoxFit.cover),
-              ),
-              Positioned(
-                bottom: 5.r,
-                right: 5.r,
-                child: Container(
-                  width: 12.w,
-                  height: 12.w,
-                  decoration: BoxDecoration(
-                    color: colorScheme.secondary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: colorScheme.surface, width: 2),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Dr. Maria Elena', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.sp, color: colorScheme.onSurface)),
-                Text('Psychologist • San Jose Hospital', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
-                SizedBox(height: 8.h),
-                Row(
-                  children: [
-                    Icon(Icons.star_rounded, color: colorScheme.tertiary, size: 18.sp),
-                    SizedBox(width: 4.w),
-                    Text('4.9', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp, color: colorScheme.onSurface)),
-                    Text(' (120 reviews)', style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12.sp)),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  'Next: Tomorrow, 09:00 AM',
-                  style: TextStyle(color: colorScheme.primary, fontSize: 11.sp, fontWeight: FontWeight.bold),
-                ),
-              ],
             ),
           ),
         ],
