@@ -1,0 +1,83 @@
+Analyzing mediconnect...
+
+  error • The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  • lib/core/theme/app_theme.dart:38:18 • argument_type_not_assignable
+  error • The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  • lib/core/theme/app_theme.dart:62:18 • argument_type_not_assignable
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/theme/design_system.dart:24:31 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/theme/design_system.dart:32:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/widgets/glass_card.dart:29:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/widgets/glass_card.dart:42:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/widgets/glass_card.dart:46:41 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/ai_assistant/screens/ai_chat_screen.dart:2:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:70:67 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/ai_assistant/screens/ai_chat_screen.dart:104:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:104:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/ai_assistant/screens/ai_chat_screen.dart:113:78 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/appointments/screens/appointment_details_screen.dart:2:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/appointments/screens/appointment_details_screen.dart:61:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/appointments/screens/appointment_details_screen.dart:121:62 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/appointments/screens/appointment_details_screen.dart:133:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/appointments/screens/appointment_details_screen.dart:133:77 • deprecated_member_use
+  error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/appointments/screens/appointments_screen.dart:76:34 • undefined_getter
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/appointments/screens/appointments_screen.dart:105:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/appointments/screens/appointments_screen.dart:127:62 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/appointments/screens/reminders_screen.dart:2:8 • unused_import
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/features/appointments/screens/reminders_screen.dart:61:9 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/auth/screens/auth_screen.dart:3:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/auth/screens/auth_screen.dart:30:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/auth/screens/auth_screen.dart:80:63 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/design_system.dart' • lib/features/auth/screens/profile_setup_screen.dart:3:8 • unused_import
+warning • The value of the local variable 'colorScheme' isn't used • lib/features/auth/screens/profile_setup_screen.dart:20:11 • unused_local_variable
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/auth/screens/profile_setup_screen.dart:69:84 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/auth/screens/profile_setup_screen.dart:87:83 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/auth/screens/profile_setup_screen.dart:107:46 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/features/auth/screens/profile_setup_screen.dart:154:17 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/features/auth/screens/profile_setup_screen.dart:160:17 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/doctor/screens/booking_screen.dart:61:73 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/doctor/screens/booking_screen.dart:76:87 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/doctor/screens/booking_screen.dart:183:69 • deprecated_member_use
+  error • Undefined name 'AppColors' • lib/features/doctor/screens/booking_screen.dart:313:41 • undefined_identifier
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/doctor/screens/doctor_profile_screen.dart:104:64 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/doctor/screens/doctor_profile_screen.dart:158:94 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/health_dashboard_screen.dart:77:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/health_dashboard_screen.dart:77:92 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/health_dashboard_screen.dart:122:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/health_dashboard_screen.dart:154:77 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/health_dashboard_screen.dart:166:74 • deprecated_member_use
+   info • The 'child' argument should be last in widget constructor invocations • lib/features/health/screens/medical_records_screen.dart:38:9 • sort_child_properties_last
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/medical_records_screen.dart:70:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/medical_records_screen.dart:70:102 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/medical_records_screen.dart:114:52 • deprecated_member_use
+   info • 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre • lib/features/health/screens/medical_records_screen.dart:130:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/prescriptions_screen.dart:43:72 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/prescriptions_screen.dart:74:46 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/health/screens/symptom_checker_screen.dart:2:8 • unused_import
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/health/screens/vital_detail_screen.dart:2:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/vital_detail_screen.dart:62:80 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/screens/vital_detail_screen.dart:108:60 • deprecated_member_use
+  error • Invalid constant value • lib/features/health/widgets/health_widgets.dart:32:58 • invalid_constant
+  error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/health/widgets/health_widgets.dart:32:68 • undefined_getter
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/widgets/health_widgets.dart:36:75 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/health/widgets/health_widgets.dart:69:87 • deprecated_member_use
+  error • Invalid constant value • lib/features/health/widgets/health_widgets.dart:78:58 • invalid_constant
+  error • The getter 'textSecondary' isn't defined for the type 'AppColors' • lib/features/health/widgets/health_widgets.dart:78:68 • undefined_getter
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:142:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:154:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:258:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/home_screen.dart:316:78 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/home/screens/notifications_screen.dart:2:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/home/screens/notifications_screen.dart:50:85 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/onboarding/screens/onboarding_screen.dart:3:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/screens/onboarding_screen.dart:74:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/screens/splash_screen.dart:42:43 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/profile/screens/privacy_screen.dart:2:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/profile/screens/privacy_screen.dart:44:38 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/features/profile/screens/privacy_screen.dart:88:7 • deprecated_member_use
+  error • Undefined name 'AppColors' • lib/features/profile/screens/profile_screen.dart:54:63 • undefined_identifier
+  error • 1 positional argument expected by '_buildCardFront', but 0 found • lib/features/profile/screens/profile_screen.dart:116:68 • not_enough_positional_arguments
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/profile/screens/profile_screen.dart:145:72 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/profile/screens/profile_screen.dart:181:55 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/profile/screens/settings_screen.dart:2:8 • unused_import
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/features/profile/screens/settings_screen.dart:85:7 • deprecated_member_use
+warning • Unused import: 'package:mediconnect/core/theme/app_theme.dart' • lib/features/profile/screens/support_screen.dart:2:8 • unused_import
+
+79 issues found. (ran in 3.4s)

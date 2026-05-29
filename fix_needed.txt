@@ -1,0 +1,22 @@
+mediconnect/lib/core/widgets/bottom_nav_bar.dart: Colors.white
+mediconnect/lib/core/widgets/glass_card.dart: Colors.white
+mediconnect/lib/core/theme/design_system.dart: Colors.black
+mediconnect/lib/core/theme/app_theme.dart: AppColors.background, AppColors.textPrimary, AppColors.textSecondary, AppColors.surface, Colors.white
+mediconnect/lib/features/health/widgets/health_widgets.dart: AppColors.textSecondary, Colors.white
+mediconnect/lib/features/health/screens/vital_detail_screen.dart: AppColors.textSecondary, Colors.white
+mediconnect/lib/features/health/screens/symptom_checker_screen.dart: AppColors.textPrimary, Colors.white
+mediconnect/lib/features/ai_assistant/screens/ai_chat_screen.dart: Colors.white, Colors.black
+mediconnect/lib/features/profile/screens/settings_screen.dart: AppColors.textPrimary, AppColors.textSecondary, Colors.white
+mediconnect/lib/features/profile/screens/profile_screen.dart: Colors.white
+mediconnect/lib/features/profile/screens/support_screen.dart: AppColors.textSecondary, Colors.white
+mediconnect/lib/features/profile/screens/privacy_screen.dart: AppColors.textPrimary, AppColors.textSecondary, Colors.white
+mediconnect/lib/features/home/screens/home_screen.dart: Colors.white
+mediconnect/lib/features/home/screens/sos_screen.dart: Colors.white, Colors.black
+mediconnect/lib/features/doctor/screens/video_call_screen.dart: Colors.white, Colors.black
+mediconnect/lib/features/doctor/screens/booking_screen.dart: AppColors.textSecondary
+mediconnect/lib/features/doctor/screens/doctor_profile_screen.dart: Colors.white
+mediconnect/lib/features/appointments/screens/reminders_screen.dart: Colors.white
+mediconnect/lib/features/appointments/screens/appointment_details_screen.dart: AppColors.textPrimary, AppColors.textSecondary, Colors.white
+mediconnect/lib/features/appointments/screens/appointments_screen.dart: AppColors.textSecondary, Colors.white, Colors.black
+mediconnect/lib/features/onboarding/screens/splash_screen.dart: Colors.white
+mediconnect/lib/features/onboarding/screens/onboarding_screen.dart: Colors.white
