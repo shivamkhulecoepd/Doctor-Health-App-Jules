@@ -72,13 +72,22 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> {
             isSelected: _selectedTab == 0,
             onTap: () => setState(() => _selectedTab = 0),
           ),
-          _TabButton(
-            label: 'Completed',
-            isSelected: _selectedTab == 1,
-            onTap: () => setState(() => _selectedTab = 1),
-          ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPastList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(20),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return _buildAppointmentCard(
+          status: 'Completed',
+          statusColor: Color(0xFF8E8E93),
+          date: 'Sep 15, 2023 - 09:00 AM',
+        );
+      },
     );
   }
 

@@ -29,7 +29,7 @@ class HealthGoalsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-              Text(detail, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+              Text(detail, style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 12)),
             ],
           ),
           const SizedBox(height: 10),
@@ -75,7 +75,7 @@ class MedicationRemindersWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(time, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                Text(time, style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 12)),
               ],
             ),
           ),

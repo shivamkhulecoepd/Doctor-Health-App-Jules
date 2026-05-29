@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/theme/app_colors.dart';
-import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
-import 'package:mediconnect/core/services/mock_data_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -144,23 +144,34 @@ class _BookingFlowScreenState extends State<BookingFlowScreen> {
   void _showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.all(16.r),
-              decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
-              child: const Icon(Icons.check_rounded, color: Colors.white, size: 40),
-            ),
-            SizedBox(height: 24.h),
-            const Text('Booking Successful!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            SizedBox(height: 8.h),
-            Text('Your appointment is confirmed.', style: TextStyle(color: AppColors.textSecondaryLight, fontSize: 14.sp)),
-            SizedBox(height: 24.h),
-            PrimaryButton(text: 'Done', onPressed: () => context.go('/home')),
-          ],
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: DesignSystem.borderL),
+        child: Padding(
+          padding: EdgeInsets.all(32.r),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.network(
+                'https://assets10.lottiefiles.com/packages/lf20_afwjh8re.json',
+                height: 120.h,
+                repeat: false,
+              ),
+              SizedBox(height: 24.h),
+              Text('Appointment Booked!', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+              SizedBox(height: 12.h),
+              Text(
+                'Your consultation with Dr. Maria Elena is confirmed for Oct 12 at 09:00 AM.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF8E8E93), height: 1.5, fontSize: 14.sp),
+              ),
+              SizedBox(height: 32.h),
+              MediButton(
+                text: 'Back to Home',
+                onPressed: () => context.go('/home'),
+              ),
+            ],
+          ),
         ),
       ),
     );

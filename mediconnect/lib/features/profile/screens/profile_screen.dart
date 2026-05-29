@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/services/mock_data_service.dart';
-import 'package:mediconnect/core/theme/app_colors.dart';
-import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/design_system.dart';
+import 'package:mediconnect/core/widgets/premium_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
@@ -66,16 +67,31 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsRow(user) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildStatItem('Appointments', user.appointmentsCount),
-        _buildStatDivider(),
-        _buildStatItem('Doctors', user.doctorsCount),
-        _buildStatDivider(),
-        _buildStatItem('Reviews', user.reviewsCount),
-      ],
+  Widget _buildHealthIDCard(UserProfile user) {
+    return GestureDetector(
+      onTap: () => setState(() => _isCardFlipped = !_isCardFlipped),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, animation) {
+          final rotate = Tween(begin: 3.14, end: 0.0).animate(animation);
+          return AnimatedBuilder(
+            animation: rotate,
+            builder: (context, widget) {
+              final isUnder = (ValueKey(_isCardFlipped) != child.key);
+              var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
+              tilt *= isUnder ? -1.0 : 1.0;
+              final value = isUnder ? (rotate.value - 3.14) : rotate.value;
+              return Transform(
+                transform: Matrix4.rotationY(value)..setEntry(3, 0, tilt),
+                alignment: Alignment.center,
+                child: widget,
+              );
+            },
+            child: child,
+          );
+        },
+        child: _isCardFlipped ? _buildCardBack() : _buildCardFront(user),
+      ),
     );
   }
 
