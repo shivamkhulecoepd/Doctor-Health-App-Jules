@@ -1,3 +1,4 @@
+import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconnect/core/theme/app_theme.dart';
@@ -154,7 +155,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         text: _currentIndex == _data.length - 1 ? 'Get Started' : 'Continue',
                         onPressed: () {
                           if (_currentIndex == _data.length - 1) {
-                            context.go('/auth');
+                        context.go('/login');
                           } else {
                             _pageController.nextPage(
                               duration: const Duration(milliseconds: 500),

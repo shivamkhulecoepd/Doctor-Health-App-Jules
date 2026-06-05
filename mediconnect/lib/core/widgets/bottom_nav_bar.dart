@@ -1,3 +1,4 @@
+import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
@@ -35,20 +36,20 @@ class CustomBottomNavBar extends StatelessWidget {
               onTap: () => onTap(0),
             ),
             _NavBarItem(
-              icon: Icons.chat_bubble_outline_rounded,
-              activeIcon: Icons.chat_bubble_rounded,
+              icon: Icons.search_rounded,
+              activeIcon: Icons.search_rounded,
               isSelected: currentIndex == 1,
               onTap: () => onTap(1),
             ),
             _NavBarItem(
-              icon: Icons.credit_card_outlined,
-              activeIcon: Icons.credit_card_rounded,
+              icon: Icons.calendar_today_outlined,
+              activeIcon: Icons.calendar_today_rounded,
               isSelected: currentIndex == 2,
               onTap: () => onTap(2),
             ),
             _NavBarItem(
-              icon: Icons.calendar_today_outlined,
-              activeIcon: Icons.calendar_today_rounded,
+              icon: Icons.favorite_outline_rounded,
+              activeIcon: Icons.favorite_rounded,
               isSelected: currentIndex == 3,
               onTap: () => onTap(3),
             ),

@@ -1,3 +1,4 @@
+import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
@@ -112,11 +113,11 @@ class AuthGatewayScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _SocialButton(icon: FontAwesomeIcons.google, label: 'Google', onTap: () {}),
+                          child: _SocialButtonWidget(icon: FontAwesomeIcons.google, label: 'Google', onTap: () {}),
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
-                          child: _SocialButton(icon: FontAwesomeIcons.apple, label: 'Apple', onTap: () {}),
+                          child: _SocialButtonWidget(icon: FontAwesomeIcons.apple, label: 'Apple', onTap: () {}),
                         ),
                       ],
                     ),
@@ -153,12 +154,12 @@ class AuthGatewayScreen extends StatelessWidget {
   }
 }
 
-class _SocialButton extends StatelessWidget {
+class _SocialButtonWidgetWidget extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
 
-  const _SocialButton({required this.icon, required this.label, required this.onTap});
+  const _SocialButtonWidgetWidget({required this.icon, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -193,42 +194,4 @@ class _SocialButton extends StatelessWidget {
   }
 }
 
-class _SocialButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _SocialButton({required this.icon, required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: DesignSystem.borderM,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          border: Border.all(color: colorScheme.outlineVariant),
-          borderRadius: DesignSystem.borderM,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 20.sp, color: colorScheme.onSurface),
-            SizedBox(width: 12.w),
-            Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
-                color: colorScheme.onSurface,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

@@ -1,59 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
+import 'package:mediconnect/core/theme/app_colors.dart';
+import 'package:mediconnect/core/theme/app_spacing.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:animate_do/animate_do.dart';
 
 class PrivacySecurityScreen extends StatelessWidget {
   const PrivacySecurityScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Privacy & Security', style: TextStyle(color: colorScheme.onSurface)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text('Privacy & Security'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          _buildSecurityCard(context),
-          const SizedBox(height: 30),
-          _buildPrivacyGroup(context, 'Access Control', [
-            _buildToggleItem(context, 'Biometric Login', true),
-            _buildToggleItem(context, 'Two-Factor Auth', false),
-          ]),
-          const SizedBox(height: 25),
-          _buildPrivacyGroup(context, 'Data Sharing', [
-            _buildToggleItem(context, 'Share with Insurance', true),
-            _buildToggleItem(context, 'Public Health Research', true),
-            _buildToggleItem(context, 'Third-party Sync', false),
-          ]),
-          const SizedBox(height: 40),
-          _buildSecurityAction(context, 'Activity Log', Icons.history),
-          _buildSecurityAction(context, 'Delete My Data', Icons.delete_outline, color: colorScheme.error),
-        ],
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.all(AppSpacing.s24),
+        child: Column(
+          children: [
+            FadeInDown(child: _buildEncryptionInfo(context, isDark)),
+            SizedBox(height: AppSpacing.s32),
+            _buildGroup(context, 'Authentication', [
+              _buildToggleTile('Face ID / Biometric', true),
+              _buildToggleTile('Two-Factor Auth', false),
+              _buildLinkTile('Change Password'),
+            ], isDark),
+            SizedBox(height: AppSpacing.s32),
+            _buildGroup(context, 'Data & Privacy', [
+              _buildToggleTile('Share with Insurance', true),
+              _buildToggleTile('Anonymous Analytics', true),
+              _buildLinkTile('Export My Data'),
+              _buildLinkTile('Delete Account', isLast: true, color: AppColors.error),
+            ], isDark),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSecurityCard(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildEncryptionInfo(BuildContext context, bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: colorScheme.secondary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.success.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: AppColors.success.withOpacity(0.2)),
       ),
       child: Row(
         children: [
-          Icon(Icons.verified_user, color: colorScheme.secondary, size: 40),
-          const SizedBox(width: 20),
+          Container(
+            padding: EdgeInsets.all(12.r),
+            decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+            child: const Icon(Icons.lock_outline_rounded, color: Colors.white, size: 24),
+          ),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Your data is secure', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: colorScheme.secondary)),
-                Text('MediConnect uses end-to-end encryption to protect your health records.', style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant)),
+                Text('End-to-End Encrypted', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, color: AppColors.success)),
+                SizedBox(height: 4.h),
+                Text('Your medical records and chats are fully protected.', style: TextStyle(fontSize: 12.sp, color: AppColors.textSecondaryLight)),
               ],
             ),
           ),
@@ -62,40 +71,40 @@ class PrivacySecurityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPrivacyGroup(BuildContext context, String title, List<Widget> items) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildGroup(BuildContext context, String title, List<Widget> children, bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, bottom: 10),
-          child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
+          padding: EdgeInsets.only(left: 8.w, bottom: 12.h),
+          child: Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: AppColors.textSecondaryLight)),
         ),
         Container(
-          decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(20)),
-          child: Column(children: items),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.cardDark : Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Column(children: children),
         ),
       ],
     );
   }
 
-  Widget _buildToggleItem(BuildContext context, String title, bool value) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return SwitchListTile(
-      title: Text(title, style: TextStyle(color: colorScheme.onSurface)),
+  Widget _buildToggleTile(String title, bool value) {
+    return SwitchListTile.adaptive(
+      title: Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500)),
       value: value,
       onChanged: (v) {},
-      activeColor: colorScheme.primary,
+      activeColor: AppColors.primary,
     );
   }
 
-  Widget _buildSecurityAction(BuildContext context, String title, IconData icon, {Color? color}) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildLinkTile(String title, {bool isLast = false, Color? color}) {
     return ListTile(
-      leading: Icon(icon, color: color ?? colorScheme.onSurface),
-      title: Text(title, style: TextStyle(color: color ?? colorScheme.onSurface)),
-      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: colorScheme.onSurfaceVariant),
+      title: Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500, color: color)),
+      trailing: Icon(Icons.arrow_forward_ios_rounded, size: 14.sp, color: AppColors.textSecondaryLight.withOpacity(0.5)),
       onTap: () {},
+      shape: !isLast ? Border(bottom: BorderSide(color: AppColors.textSecondaryLight.withOpacity(0.1))) : null,
     );
   }
 }

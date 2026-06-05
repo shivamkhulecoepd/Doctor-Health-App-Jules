@@ -7,12 +7,15 @@ import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 import 'package:mediconnect/shared/widgets/message_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MessagesScreen extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/core/providers/app_providers.dart';
+
+class MessagesScreen extends ConsumerWidget {
   const MessagesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final messages = MockDataService.messages;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messages = ref.watch(messagesProvider);
 
     return Scaffold(
       appBar: AppBar(

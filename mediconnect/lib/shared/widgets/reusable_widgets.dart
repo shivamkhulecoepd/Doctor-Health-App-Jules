@@ -154,3 +154,26 @@ class PrimaryButton extends StatelessWidget {
     );
   }
 }
+
+class ActionIcon extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final Color? color;
+  final double? size;
+
+  const ActionIcon({
+    super.key,
+    required this.icon,
+    required this.onTap,
+    this.color,
+    this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon, color: color, size: size ?? 24.sp),
+      onPressed: onTap,
+    );
+  }
+}

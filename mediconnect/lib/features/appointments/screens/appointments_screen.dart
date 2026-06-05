@@ -1,23 +1,25 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:mediconnect/core/theme/app_spacing.dart';
 import 'package:mediconnect/shared/widgets/appointment_card.dart';
-import 'package:mediconnect/core/services/mock_data_service.dart';
+import 'package:mediconnect/core/providers/app_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AppointmentsListScreen extends StatefulWidget {
+class AppointmentsListScreen extends ConsumerStatefulWidget {
   const AppointmentsListScreen({super.key});
 
   @override
-  State<AppointmentsListScreen> createState() => _AppointmentsListScreenState();
+  ConsumerState<AppointmentsListScreen> createState() => _AppointmentsListScreenState();
 }
 
-class _AppointmentsListScreenState extends State<AppointmentsListScreen> {
+class _AppointmentsListScreenState extends ConsumerState<AppointmentsListScreen> {
   int _selectedTab = 0; // 0 for Upcoming, 1 for Completed
 
   @override
   Widget build(BuildContext context) {
-    final appointments = MockDataService.appointments.where((a) {
+    final appointments = ref.watch(appointmentsProvider).where((a) {
       if (_selectedTab == 0) return a.status == 'Upcoming';
       return a.status == 'Completed';
     }).toList();
@@ -46,7 +48,7 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> {
                     itemBuilder: (context, index) {
                       return AppointmentCard(
                         appointment: appointments[index],
-                        onTap: () {},
+                        onTap: () => context.push('/appointment/${appointments[index].id}'),
                       );
                     },
                   ),
@@ -72,22 +74,13 @@ class _AppointmentsListScreenState extends State<AppointmentsListScreen> {
             isSelected: _selectedTab == 0,
             onTap: () => setState(() => _selectedTab = 0),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildPastList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(20),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return _buildAppointmentCard(
-          status: 'Completed',
-          statusColor: Color(0xFF8E8E93),
-          date: 'Sep 15, 2023 - 09:00 AM',
-        );
-      },
+          _TabButton(
+            label: 'Completed',
+            isSelected: _selectedTab == 1,
+            onTap: () => setState(() => _selectedTab = 1),
+          ),
+        ],
+      ),
     );
   }
 
