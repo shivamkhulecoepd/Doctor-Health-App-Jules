@@ -74,7 +74,7 @@ class _DoctorSearchScreenState extends State<DoctorSearchScreen> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 16.h,
                 crossAxisSpacing: 16.w,
-                childAspectRatio: 0.75,
+                childAspectRatio: 0.65.w,
               ),
               itemCount: doctors.length,
               itemBuilder: (context, index) {

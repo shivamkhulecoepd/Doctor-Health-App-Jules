@@ -2,10 +2,8 @@ import "package:mediconnect/shared/widgets/reusable_widgets.dart";
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 import 'package:mediconnect/core/services/mock_data_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentDetailsScreen extends StatelessWidget {

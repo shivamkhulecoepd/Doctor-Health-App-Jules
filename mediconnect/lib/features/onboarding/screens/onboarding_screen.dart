@@ -1,10 +1,7 @@
 import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
-import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -43,7 +40,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Stack(

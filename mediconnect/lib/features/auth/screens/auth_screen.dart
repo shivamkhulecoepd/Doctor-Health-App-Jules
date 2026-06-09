@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -113,11 +112,11 @@ class AuthGatewayScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _SocialButtonWidget(icon: FontAwesomeIcons.google, label: 'Google', onTap: () {}),
+                          child: _SocialButtonWidgetWidget(icon: FontAwesomeIcons.google, label: 'Google', onTap: () {}),
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
-                          child: _SocialButtonWidget(icon: FontAwesomeIcons.apple, label: 'Apple', onTap: () {}),
+                          child: _SocialButtonWidgetWidget(icon: FontAwesomeIcons.apple, label: 'Apple', onTap: () {}),
                         ),
                       ],
                     ),
@@ -194,4 +193,3 @@ class _SocialButtonWidgetWidget extends StatelessWidget {
   }
 }
 
-}

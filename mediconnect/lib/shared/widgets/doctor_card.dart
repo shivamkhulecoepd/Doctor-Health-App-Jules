@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mediconnect/core/models/app_models.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
-import 'badges_icons.dart';
 
 class DoctorCard extends StatelessWidget {
   final Doctor doctor;
@@ -26,7 +25,6 @@ class DoctorCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 240.w,
-        margin: EdgeInsets.only(right: 16.w),
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: isDark ? AppColors.cardDark : Colors.white,
@@ -60,9 +58,11 @@ class DoctorCard extends StatelessWidget {
             ),
             Text(
               doctor.specialty,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            const Spacer(),
+            SizedBox(height: 8.h),
             Row(
               children: [
                 Expanded(

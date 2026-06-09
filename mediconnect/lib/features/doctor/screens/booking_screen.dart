@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 import 'package:mediconnect/core/models/app_models.dart';
 import 'package:mediconnect/core/providers/app_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -1,10 +1,7 @@
 import "package:mediconnect/shared/widgets/reusable_widgets.dart";
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
-import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:animate_do/animate_do.dart';
 
 class NearbyHospitalsScreen extends StatelessWidget {
   const NearbyHospitalsScreen({super.key});

@@ -1,8 +1,6 @@
 import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
-import 'package:mediconnect/core/widgets/premium_widgets.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

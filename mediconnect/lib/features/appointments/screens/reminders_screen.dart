@@ -1,8 +1,6 @@
 import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconnect/core/theme/design_system.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:animate_do/animate_do.dart';
 
 class RemindersSettingsScreen extends StatelessWidget {
@@ -95,7 +93,7 @@ class RemindersSettingsScreen extends StatelessWidget {
       title: Text(title, style: TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 15.sp)),
       value: value,
       onChanged: (v) {},
-      activeColor: colorScheme.primary,
+      activeThumbColor: colorScheme.primary,
       contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
     );
   }

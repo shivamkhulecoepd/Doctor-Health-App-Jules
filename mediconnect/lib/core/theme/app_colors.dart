@@ -1,4 +1,3 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -26,6 +25,7 @@ class AppColors {
   static const Color error = Color(0xFFFF3B30);
   static const Color success = Color(0xFF34C759);
   static const Color warning = Color(0xFFFF9500);
+  static const Color info = Color(0xFF0F6AF2);
 
   // Gradients
   static const LinearGradient primaryGradient = LinearGradient(

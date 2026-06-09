@@ -1,8 +1,6 @@
 import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
-import 'package:mediconnect/core/widgets/premium_widgets.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:animate_do/animate_do.dart';
 
@@ -41,8 +39,8 @@ class MedicalRecordsScreen extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: () {},
           backgroundColor: colorScheme.primary,
-          child: Icon(Icons.cloud_upload_rounded, color: Colors.white, size: 28.sp),
           elevation: 6,
+          child: Icon(Icons.cloud_upload_rounded, color: Colors.white, size: 28.sp),
         ),
       ),
     );
@@ -129,7 +127,7 @@ class MedicalRecordsScreen extends StatelessWidget {
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                decoration: BoxDecoration(color: colorScheme.surfaceVariant.withOpacity(0.5), borderRadius: BorderRadius.circular(6.r)),
+                decoration: BoxDecoration(color: colorScheme.surfaceContainerHighest.withOpacity(0.5), borderRadius: BorderRadius.circular(6.r)),
                 child: Text(type, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
               ),
               SizedBox(width: 8.w),

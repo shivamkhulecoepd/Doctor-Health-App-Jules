@@ -1,7 +1,6 @@
 import "package:mediconnect/core/widgets/glass_card.dart";
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -115,7 +114,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: colorScheme.surfaceVariant.withOpacity(0.3),
+                color: colorScheme.surfaceContainerHighest.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(28.r),
               ),
               child: TextField(

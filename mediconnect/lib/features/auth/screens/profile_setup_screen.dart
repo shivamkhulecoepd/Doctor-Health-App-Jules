@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mediconnect/core/theme/design_system.dart';
 import 'package:mediconnect/core/widgets/premium_widgets.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
@@ -211,7 +209,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               onChanged: (v) {},
               title: Text('Push Notifications', style: TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
               subtitle: Text('Reminders for appointments and meds', style: TextStyle(fontSize: 12.sp)),
-              activeColor: colorScheme.primary,
+              activeThumbColor: colorScheme.primary,
             ),
             Divider(height: 1, indent: 16.w, endIndent: 16.w),
             SwitchListTile(
@@ -219,7 +217,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               onChanged: (v) {},
               title: Text('Health Data Sync', style: TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
               subtitle: Text('Sync with Apple Health / Google Fit', style: TextStyle(fontSize: 12.sp)),
-              activeColor: colorScheme.primary,
+              activeThumbColor: colorScheme.primary,
             ),
           ],
         );

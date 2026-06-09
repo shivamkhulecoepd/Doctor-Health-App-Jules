@@ -1,7 +1,5 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconnect/core/theme/app_colors.dart';
+  import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/theme/app_theme.dart';
 
 class HealthGoalsWidget extends StatelessWidget {
   const HealthGoalsWidget({super.key});
@@ -31,7 +29,7 @@ class HealthGoalsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-              Text(detail, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+              Text(detail, style: TextStyle(color: AppColors.accent, fontSize: 12)),
             ],
           ),
           const SizedBox(height: 10),
@@ -77,11 +75,11 @@ class MedicationRemindersWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(time, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                Text(time, style: TextStyle(color: AppColors.accent, fontSize: 12)),
               ],
             ),
           ),
-          Checkbox(value: isTaken, onChanged: (v) {}, activeColor: AppColors.secondary, shape: const CircleBorder()),
+          Checkbox(value: isTaken, onChanged: (v) {}, activeColor: AppColors.accent, shape: const CircleBorder()),
         ],
       ),
     );

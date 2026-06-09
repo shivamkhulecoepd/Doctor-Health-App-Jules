@@ -1,14 +1,11 @@
-import "package:mediconnect/shared/widgets/reusable_widgets.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:mediconnect/core/theme/app_spacing.dart';
 import 'package:mediconnect/core/providers/app_providers.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
-import 'package:mediconnect/shared/widgets/badges_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:mediconnect/shared/widgets/badges_icons.dart' hide ActionIcon;
+import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 
 class DoctorDashboardScreen extends ConsumerWidget {
   const DoctorDashboardScreen({super.key});
@@ -22,7 +19,7 @@ class DoctorDashboardScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
-          children: [
+          children: [ 
             _buildWelcomeHeader(context, isDark),
             Padding(
               padding: EdgeInsets.all(AppSpacing.s24),
@@ -64,6 +61,7 @@ class DoctorDashboardScreen extends ConsumerWidget {
               Text('Dr. Marcus!', style: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold)),
             ],
           ),
+          // ActionIcon(icon: Icons.notifications_none_rounded, color: Colors.white, onTap: () {}),
           ActionIcon(icon: Icons.notifications_none_rounded, color: Colors.white, onTap: () {}),
         ],
       ),
@@ -126,7 +124,7 @@ class DoctorDashboardScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              const StatusBadge(label: 'Confirmed', color: AppColors.success),
+              const StatusBadge(label: 'Confirmed', color: AppColors.success)
             ],
           ),
         );

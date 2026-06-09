@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentsBillingScreen extends StatelessWidget {

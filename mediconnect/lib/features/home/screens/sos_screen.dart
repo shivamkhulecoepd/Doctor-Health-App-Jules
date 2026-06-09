@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mediconnect/core/theme/design_system.dart';
-import 'package:mediconnect/core/widgets/glass_card.dart';
 import 'package:animate_do/animate_do.dart';
 
 class SOSScreen extends StatefulWidget {
@@ -21,7 +19,7 @@ class _SOSScreenState extends State<SOSScreen> with SingleTickerProviderStateMix
     super.initState();
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1.5),
+      duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
   }
 

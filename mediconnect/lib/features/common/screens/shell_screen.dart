@@ -36,7 +36,7 @@ class ShellScreen extends StatelessWidget {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: -20,
             child: FadeInUp(
               duration: const Duration(milliseconds: 600),
               child: CustomBottomNavBar(

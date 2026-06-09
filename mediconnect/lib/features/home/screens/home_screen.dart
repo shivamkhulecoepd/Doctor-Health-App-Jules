@@ -1,17 +1,13 @@
-import 'package:intl/intl.dart';
 import "package:mediconnect/core/widgets/glass_card.dart";
 import "package:mediconnect/shared/widgets/reusable_widgets.dart";
 import 'package:flutter/material.dart';
-import 'package:mediconnect/core/services/mock_data_service.dart';
-import 'package:mediconnect/core/theme/app_colors.dart';
 import 'package:mediconnect/core/theme/app_spacing.dart';
-import 'package:mediconnect/shared/widgets/reusable_widgets.dart';
 import 'package:mediconnect/shared/widgets/doctor_card.dart';
-import 'package:mediconnect/shared/widgets/appointment_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:mediconnect/core/providers/app_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -19,11 +15,9 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final user = ref.watch(userProvider);
     final doctors = ref.watch(doctorsProvider);
     final appointments = ref.watch(appointmentsProvider);
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -130,7 +124,7 @@ class HomeScreen extends ConsumerWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     Text(
-                      appointment.specialty,
+                      appointment.doctorSpecialty,
                       style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12.sp),
                     ),
                   ],
@@ -167,7 +161,10 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     const Icon(Icons.access_time_rounded, color: Colors.white, size: 16),
                     SizedBox(width: 8.w),
-                    Text(appointment.dateTime, style: const TextStyle(color: Colors.white, fontSize: 12)),
+                    Text(
+                      DateFormat('E, MMM d • HH:mm').format(appointment.dateTime.toLocal()),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
                   ],
                 ),
               ],
@@ -248,7 +245,7 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _buildDoctorsList(doctors, BuildContext context) {
     return SizedBox(
-      height: 260.h,
+      height: 310.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -263,15 +260,5 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
-
-  Widget _buildConsultationHistory(appointments, BuildContext context) {
-    return Column(
-      children: appointments.map<Widget>((appointment) {
-        return AppointmentCard(
-          appointment: appointment,
-          onTap: () => context.push('/appointment/${appointment.id}'),
-        );
-      }).toList(),
-    );
-  }
 }
+
